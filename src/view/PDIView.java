@@ -237,7 +237,7 @@ public class PDIView {
 				}
 				else{
 					BufferedImage grayImage = null;
-					grayImage = pdi.setGrayScale(image); 
+					grayImage = pdi.setGrayScale(processedImage); 
 					
 					processedImage = grayImage;
 					
@@ -336,6 +336,34 @@ public class PDIView {
 		btnBorderOperator.setIcon(new ImageIcon(PDIView.class.getResource("/images/border (Custom).png")));
 		btnBorderOperator.setBounds(484, 0, 51, 38);
 		frmSin.getContentPane().add(btnBorderOperator);
+		
+		
+		//set noise to a image
+		JButton btnNoise = new JButton("");
+		btnNoise.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				if(image == null){
+					
+					JOptionPane.showMessageDialog(null, "Open a image first!");
+				}
+				else{
+					
+					BufferedImage noisedImage = null;
+					
+					noisedImage = pdi.generateNoise(processedImage); 
+					
+					processedImage = noisedImage;
+					resizeDisplay(processedImage, imageLabel);
+
+				}
+				
+			}
+		});
+		btnNoise.setIcon(new ImageIcon(PDIView.class.getResource("/images/noise (Custom).png")));
+		btnNoise.setToolTipText("Noise (Salt and pepper)");
+		btnNoise.setBounds(545, 0, 51, 38);
+		frmSin.getContentPane().add(btnNoise);
 		
 
 		
