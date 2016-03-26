@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.text.NumberFormatter;
 
 public class IntensityViewer extends JDialog {
-	
+
 	/**
 	 * 
 	 */
@@ -47,48 +47,48 @@ public class IntensityViewer extends JDialog {
 			buttonPane.setBounds(10, 59, 316, 33);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane);
-			{	//update the intensity value
+			{ // update the intensity value
 				JButton okButton = new JButton("OK");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						
-						//get the new value of intensity
+
+						// get the new value of intensity
 						int newIntensity;
-						newIntensity = Integer.parseInt(formattedTextField.getText()); 
+						newIntensity = Integer.parseInt(formattedTextField.getText());
 						System.out.println(newIntensity);
-						
+
 					}
 				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
-			{	//close the dialog
+			{ // close the dialog
 				JButton cancelButton = new JButton("Cancel");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						
+
 						dispose();
-						
+
 					}
 				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
 		}
-		
+
 		JLabel lblIntensityValue = new JLabel("Intensity Value:");
 		lblIntensityValue.setBounds(10, 31, 86, 14);
 		getContentPane().add(lblIntensityValue);
-		
-		//Define the format to accept just numbers
+
+		// Define the format to accept just numbers
 		NumberFormat longFormat = NumberFormat.getIntegerInstance();
 		NumberFormatter numberFormatter = new NumberFormatter(longFormat);
-		numberFormatter.setValueClass(Long.class); //optional, ensures you will always get a long value
-		numberFormatter.setAllowsInvalid(false); //this is the key!!
-		numberFormatter.setMinimum(0l); //Optional
-		
-		
+		numberFormatter.setValueClass(Long.class); // optional, ensures you will
+													// always get a long value
+		numberFormatter.setAllowsInvalid(false); // this is the key!!
+		numberFormatter.setMinimum(0l); // Optional
+
 		formattedTextField = new JFormattedTextField(numberFormatter);
 		formattedTextField.setBounds(92, 28, 76, 20);
 		getContentPane().add(formattedTextField);

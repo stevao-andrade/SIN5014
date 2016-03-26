@@ -1,4 +1,5 @@
 package labes.icmc.usp.control;
+
 import java.awt.Color;
 import java.awt.Font;
 
@@ -17,19 +18,16 @@ import org.jfree.ui.Layer;
 import org.jfree.ui.RectangleAnchor;
 import org.jfree.ui.TextAnchor;
 
-
-
 /**
  * This class handle the creation of a histogram extending JDialog class
+ * 
  * @author stevao
  *
  */
-public class Histogram  extends JDialog{
-	
+public class Histogram extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	
-	
+
 	/**
 	 * Constructor.. just call all methods and builds a frame
 	 */
@@ -43,22 +41,19 @@ public class Histogram  extends JDialog{
 		JFreeChart chart = createChart(dataset, chartTitle);
 
 		final ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-        setContentPane(chartPanel);
+		chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+		setContentPane(chartPanel);
 	}
-	
-	
-	
 
 	/**
 	 * Default plot conventions
-	 * */
+	 */
 	private JFreeChart createChart(IntervalXYDataset dataset, String chartTitle) {
-		final JFreeChart chart = ChartFactory.createXYBarChart("Frequency Histogram", "Color", false, "Occurrence", dataset,
-				PlotOrientation.VERTICAL, true, true, false);
-		
+		final JFreeChart chart = ChartFactory.createXYBarChart("Frequency Histogram", "Color", false, "Occurrence",
+				dataset, PlotOrientation.VERTICAL, true, true, false);
+
 		XYPlot plot = (XYPlot) chart.getPlot();
-		
+
 		final IntervalMarker target = new IntervalMarker(100.0, 200.0);
 		target.setLabel("Target Range");
 		target.setLabelFont(new Font("SansSerif", Font.ITALIC, 8));
@@ -66,14 +61,13 @@ public class Histogram  extends JDialog{
 		target.setLabelTextAnchor(TextAnchor.CENTER_LEFT);
 		target.setPaint(new Color(222, 222, 255, 128));
 		plot.addRangeMarker(target, Layer.BACKGROUND);
-		
+
 		return chart;
 	}
-	
-	
+
 	/**
 	 * Parsing the array values to a data set object
-	 * */
+	 */
 	private IntervalXYDataset createDataSet(int[] array) {
 
 		int len = array.length;

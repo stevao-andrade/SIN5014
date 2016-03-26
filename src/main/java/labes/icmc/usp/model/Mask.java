@@ -42,5 +42,11 @@ public class Mask {
 		return weights[line][column];
 	}
 
+
+
+	public void setWeights(int[][] weights) {
+		this.weights = weights;
+	}
+	
 	
 }
