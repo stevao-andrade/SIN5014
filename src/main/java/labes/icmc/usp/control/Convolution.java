@@ -1,6 +1,8 @@
 package labes.icmc.usp.control;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+
 import labes.icmc.usp.model.Mask;
 
 /**
@@ -45,7 +47,7 @@ public class Convolution {
 	 * @param kernel
 	 *            mask that wants to apply into the pixel
 	 */
-	public int pixelConvolution(Color color, int imgLine, int imgColumn, Mask kernel) {
+	public int pixelConvolution(BufferedImage image, int imgLine, int imgColumn, Mask kernel) {
 
 		int kernelWidth = kernel.getWidth();
 		int kernelHeigth = kernel.getHeight();
@@ -57,27 +59,25 @@ public class Convolution {
 			for (int kernelColumn = 0; kernelColumn < kernelWidth; kernelColumn++) {
 
 				try {
+					
+					// get the color of the pixel
+					Color color = new Color(image.getRGB(imgColumn + kernelColumn, imgLine + kernelLine));
 
 					// It's in gray scale, so RGB have always the same value
 					int point = color.getRed();
 					
-
-					System.out.println("Before Convolution: " + Integer.toString(weight));
-
 					// apply operation to pixel
 					weight = weight + point * kernel.getWeight(kernelLine, kernelColumn);
 
 					// check if it's a valid value
 					weight = Utils.checkBoundaries(weight);
 					
-					System.out.println("After Convolution: " + Integer.toString(weight));
-
-				} catch (Exception e) {
-					System.out.println(e.getStackTrace());
+				
+				} catch (ArrayIndexOutOfBoundsException e) {
+					weight = 0;  //handling borders.. right now just define the weight as zero
 				}
 			}
 		}
-
 		return weight;
 	}
 
