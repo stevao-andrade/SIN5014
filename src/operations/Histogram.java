@@ -1,4 +1,4 @@
-package control;
+package operations;
 import java.awt.Color;
 import java.awt.Font;
 
@@ -17,11 +17,16 @@ import org.jfree.ui.Layer;
 import org.jfree.ui.RectangleAnchor;
 import org.jfree.ui.TextAnchor;
 
+
+
+/**
+ * This class handle the creation of a histogram extending JDialog class
+ * @author stevao
+ *
+ */
 public class Histogram  extends JDialog{
 	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	
 	

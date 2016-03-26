@@ -1,43 +1,18 @@
-package control;
+package operations;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
 
-//This class handles the image operations
+/**
+ * This class handles digital image process operations 
+ * @author stevao
+ *
+ */
 public class PDI {
 	
 		
-	
-	/**
-	 *Blank constructor 
-	 */ 
-	public PDI() {
-	}
-	
-	
-	
-	
-	/**
-	 * Fix boundaries problems when change color pixel values 
-	 * @param color represent the color that wants to check the bondaries
-	 * @return return the color with a fixed value
-	 */
-	private int checkBoundaries(int color){
 		
-		if(color < 0){
-			color = 0;
-		}
-		else{
-			if(color > 255)
-				color = 255;
-		}
-		
-		return color;
-	}
-	
-	
-	
 	/**
 	 * This method builds the matrix of the image and return a array that represents the frequency of the colors in the image 
 	 * @return a vector of integer that represents the frequency of the colors in a image
@@ -108,9 +83,9 @@ public class PDI {
 				blue  = blue  + intensity;
 				
 				//check if the new values explodes the boundaries and fix this issue
-				red   = checkBoundaries(red);
-				green = checkBoundaries(green);
-				blue  = checkBoundaries(blue);
+				red   = Utils.checkBoundaries(red);
+				green = Utils.checkBoundaries(green);
+				blue  = Utils.checkBoundaries(blue);
 				
 				
 				//creates a new color with the new values
@@ -163,44 +138,6 @@ public class PDI {
 	}
 	
 	
-	
-	/**
-	 * Simple check if an image is in gray scale schema
-	 * @param image -> image that wants to check
-	 * @return -> a boolean that indicates if the image is on grayScale or not
-	 */
-	public boolean isGrayScale(BufferedImage image){
-		
-		//get the image dimensions
-		int imageHeight = image.getHeight();
-		int imageWidth  = image.getWidth();
-				
-		
-		//run for each pixel of the image
-		for(int line = 0; line < imageHeight; line++){
-			for(int column = 0; column < imageWidth; column++){
-				
-				//get the color of the pixel
-				Color color = new Color(image.getRGB(column, line));
-				
-				//get the values of RGB channel
-				int red   = color.getRed();
-				int green = color.getGreen();
-				int blue  = color.getBlue();
-				
-				//check if they are equals
-				if ((red == blue) && (blue == green)){
-					continue;
-				}else
-					return false;
-				
-			}
-		}
-		
-		//if reach here, all pixels have the same value to RGB, so the image is on grayscale
-		return true;
-	
-	}
 	
 	/**
 	 * This method applies salt and pepper noise to a image

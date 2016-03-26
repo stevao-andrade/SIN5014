@@ -22,9 +22,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import control.Histogram;
-import control.PDI;
 import net.coobird.thumbnailator.Thumbnails;
+import operations.Histogram;
+import operations.PDI;
 
 public class PDIView {
 	
