@@ -361,7 +361,27 @@ public class PDIView {
 		btnNoise.setBounds(733, 0, 51, 38);
 		frmSin.getContentPane().add(btnNoise);
 		
+		//image quantization
 		JButton btnQuantization = new JButton("");
+		btnQuantization.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if (image == null) {
+
+					JOptionPane.showMessageDialog(null, "Open a image first!");
+				} else {
+
+					BufferedImage quantizedImage = null;
+					
+					//this parameter should be controlled
+					quantizedImage = pdi.quantizationImage(processedImage, 12);
+
+					processedImage = quantizedImage;
+					resizeDisplay(processedImage, imageLabel);
+				}
+				
+			}
+		});
 		btnQuantization.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/quantization.png")));
 		btnQuantization.setToolTipText("Quantization");
 		btnQuantization.setBounds(423, 0, 51, 38);

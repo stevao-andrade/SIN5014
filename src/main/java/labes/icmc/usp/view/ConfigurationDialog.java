@@ -90,7 +90,7 @@ public class ConfigurationDialog extends JDialog {
 		numberFormatter.setMinimum(0l); // Optional
 
 		intensityTextField = new JFormattedTextField(numberFormatter);
-		intensityTextField.setBounds(186, 28, 76, 20);
+		intensityTextField.setBounds(255, 28, 76, 20);
 		getContentPane().add(intensityTextField);
 		
 		JLabel lblKernelSizedefault = new JLabel("Kernel size (Default = 3x3)");
@@ -98,7 +98,15 @@ public class ConfigurationDialog extends JDialog {
 		getContentPane().add(lblKernelSizedefault);
 		
 		JFormattedTextField formattedTextField = new JFormattedTextField();
-		formattedTextField.setBounds(186, 59, 76, 20);
+		formattedTextField.setBounds(255, 59, 76, 20);
 		getContentPane().add(formattedTextField);
+		
+		JLabel lblNewLabel = new JLabel("Quantization level (Default = 128, Max = 256)");
+		lblNewLabel.setBounds(10, 93, 235, 14);
+		getContentPane().add(lblNewLabel);
+		
+		JFormattedTextField formattedTextField_1 = new JFormattedTextField();
+		formattedTextField_1.setBounds(255, 90, 76, 20);
+		getContentPane().add(formattedTextField_1);
 	}
 }

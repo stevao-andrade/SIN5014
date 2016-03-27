@@ -234,17 +234,72 @@ public class PDI {
 
 		return resultImage;
 	}
-	
-	
-	
+
 	/**
 	 * Apply gradient to a image
-	 * @param image Target image
+	 * 
+	 * @param image
+	 *            Target image
 	 * @return processed image
 	 */
-	
-	public BufferedImage gradientImage(BufferedImage image){
-		
+
+	public BufferedImage gradientImage(BufferedImage image) {
+
+		// get the image dimensions
+		int imageHeight = image.getHeight();
+		int imageWidth = image.getWidth();
+
+		// set the image to gray scale
+		BufferedImage resultImage = null;
+		resultImage = setGrayScale(image);
+
+		// run for each pixel of the image
+		for (int line = 0; line < imageHeight; line++) {
+			for (int column = 0; column < imageWidth; column++) {
+
+				// get the color of the pixel
+				Color positionColor = new Color(image.getRGB(column, line));
+
+				// define neighbor pixels
+				Color positionColor2;
+				Color positionColor3;
+
+				// handle array index out bounds exception
+				try {
+					positionColor2 = new Color(image.getRGB(column, line + 1));
+				} catch (ArrayIndexOutOfBoundsException e) {
+					positionColor2 = new Color(image.getRGB(column, line - 1));
+				}
+
+				try {
+					positionColor3 = new Color(image.getRGB(column + 1, line));
+				} catch (ArrayIndexOutOfBoundsException e) {
+					positionColor3 = new Color(image.getRGB(column - 1, line));
+				}
+
+				// get one value of RGB. Values are always the same because it's
+				// in gray scale
+				int positionPixel = positionColor.getRed();
+				int positionPixel2 = positionColor2.getRed();
+				int positionPixel3 = positionColor3.getRed();
+
+				// define a new value to position pixel
+				positionPixel = Math.abs(positionPixel - positionPixel2) + Math.abs(positionPixel - positionPixel3);
+
+				// define a new color with the positionPixel
+				Color newColor = new Color(positionPixel, positionPixel, positionPixel);
+
+				// set into resultImage
+				resultImage.setRGB(column, line, newColor.getRGB());
+
+			}
+		}
+
+		return resultImage;
+	}
+
+	public BufferedImage quantizationImage(BufferedImage image, int finalColorSize) {
+
 		// get the image dimensions
 		int imageHeight = image.getHeight();
 		int imageWidth = image.getWidth();
@@ -253,45 +308,29 @@ public class PDI {
 		BufferedImage resultImage = null;
 		resultImage = setGrayScale(image);
 		
+		int colorSize = 256;
+		
+		int nivelSize = colorSize/finalColorSize;
+
 		// run for each pixel of the image
 		for (int line = 0; line < imageHeight; line++) {
 			for (int column = 0; column < imageWidth; column++) {
 				
 				// get the color of the pixel
-				Color positionColor  = new Color(image.getRGB(column, line));
+				Color positionColor = new Color(image.getRGB(column, line));
 				
-				//define neighbor pixels
-				Color positionColor2;
-				Color positionColor3; 
+				int color = positionColor.getRed();
 				
-				//handle array index out bounds exception
-				try{
-					positionColor2 = new Color(image.getRGB(column, line+1));					
-				}catch(ArrayIndexOutOfBoundsException e){
-					positionColor2 = new Color(image.getRGB(column, line-1));
-				}
+				int valueColor = (int) (color/nivelSize) * nivelSize;
 				
-				try{
-					positionColor3 = new Color(image.getRGB(column+1, line));					
-				}catch(ArrayIndexOutOfBoundsException e){
-					positionColor3 = new Color(image.getRGB(column-1, line));
-				}
+				valueColor = Utils.checkBoundaries(valueColor);
 				
-				//get one value of RGB. Values are always the same because it's in gray scale
-				int positionPixel  = positionColor.getRed(); 
-				int positionPixel2 = positionColor2.getRed();
-				int positionPixel3 = positionColor3.getRed();
+				Color newColor = new Color(valueColor, valueColor, valueColor);
 				
-				//define a new value to position pixel
-				positionPixel = Math.abs(positionPixel - positionPixel2) + Math.abs(positionPixel - positionPixel3); 
-				
-				//define a new color with the positionPixel
-				Color newColor = new Color(positionPixel, positionPixel, positionPixel);
-				
-				//set into resultImage
+				// set into resultImage
 				resultImage.setRGB(column, line, newColor.getRGB());
 				
-			}	
+			}
 		}
 		
 		return resultImage;
