@@ -326,13 +326,13 @@ public class PDIView {
 		btnLowPassFilter.setToolTipText("Low Pass Filter");
 		btnLowPassFilter
 				.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/low_frequency.png")));
-		btnLowPassFilter.setBounds(423, 0, 51, 38);
+		btnLowPassFilter.setBounds(611, 0, 51, 38);
 		frmSin.getContentPane().add(btnLowPassFilter);
 
 		JButton btnBorderOperator = new JButton("");
 		btnBorderOperator.setToolTipText("Border Operator");
 		btnBorderOperator.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/border.png")));
-		btnBorderOperator.setBounds(484, 0, 51, 38);
+		btnBorderOperator.setBounds(672, 0, 51, 38);
 		frmSin.getContentPane().add(btnBorderOperator);
 
 		// set noise to a image
@@ -358,8 +358,26 @@ public class PDIView {
 		});
 		btnNoise.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/noise.png")));
 		btnNoise.setToolTipText("Noise (Salt and pepper)");
-		btnNoise.setBounds(545, 0, 51, 38);
+		btnNoise.setBounds(733, 0, 51, 38);
 		frmSin.getContentPane().add(btnNoise);
+		
+		JButton btnQuantization = new JButton("");
+		btnQuantization.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/quantization.png")));
+		btnQuantization.setToolTipText("Quantization");
+		btnQuantization.setBounds(423, 0, 51, 38);
+		frmSin.getContentPane().add(btnQuantization);
+		
+		JButton btnSpliting = new JButton("");
+		btnSpliting.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/split.png")));
+		btnSpliting.setToolTipText("Spliting");
+		btnSpliting.setBounds(484, 0, 51, 38);
+		frmSin.getContentPane().add(btnSpliting);
+		
+		JButton btnGradient = new JButton("");
+		btnGradient.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/gradient.png")));
+		btnGradient.setToolTipText("Gradient");
+		btnGradient.setBounds(550, 0, 51, 38);
+		frmSin.getContentPane().add(btnGradient);
 
 		mntmOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
