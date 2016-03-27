@@ -324,8 +324,31 @@ public class PDIView {
 		btnMeanFilter.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/mean.png")));
 		btnMeanFilter.setBounds(240, 0, 51, 38);
 		frmSin.getContentPane().add(btnMeanFilter);
-
+		
+		
+		//median filter
 		JButton btnMedianFilter = new JButton("");
+		btnMedianFilter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				if (image == null) {
+
+					JOptionPane.showMessageDialog(null, "Open a image first!");
+				} else {
+
+					BufferedImage medianImage = null;
+					Mask kernel = new Mask(KERNEL_SIZE, KERNEL_SIZE);
+					
+					medianImage = pdi.medianFilter(processedImage, kernel);
+
+					processedImage = medianImage;
+					resizeDisplay(processedImage, imageLabel);
+
+				}
+
+				
+			}
+		});
 		btnMedianFilter.setToolTipText("Median Filter");
 		btnMedianFilter.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/median.png")));
 		btnMedianFilter.setBounds(301, 0, 51, 38);

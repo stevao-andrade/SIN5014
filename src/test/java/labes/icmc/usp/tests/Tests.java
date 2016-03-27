@@ -81,13 +81,13 @@ public class Tests {
 				
 				int newColor;
 				
-				newColor = c.pixelConvolution(image, line, column, kernel);
+				//newColor = c.pixelConvolution(image, line, column, kernel);
 				
 				//gray scale RGB is always the same
-				Color color = new Color(newColor, newColor, newColor);
+				//Color color = new Color(newColor, newColor, newColor);
 				
 				//update the value in result image
-				resultImage.setRGB(column, line, color.getRGB());
+				//resultImage.setRGB(column, line, color.getRGB());
 			}
 		}
 		

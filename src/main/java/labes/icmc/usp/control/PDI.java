@@ -42,7 +42,6 @@ public class PDI {
 				int red = color.getRed();
 				int green = color.getGreen();
 				int blue = color.getBlue();
-				int alpha = color.getAlpha();
 
 				// update the values with the intensity
 				red = red + intensity;
@@ -56,7 +55,7 @@ public class PDI {
 				blue = Utils.checkBoundaries(blue);
 
 				// creates a new color with the new values
-				Color newColor = new Color(red, green, blue, alpha);
+				Color newColor = new Color(red, green, blue);
 
 				// update the result image
 				resultImage.setRGB(column, line, newColor.getRGB());
@@ -222,12 +221,12 @@ public class PDI {
 				// get the color of the pixel
 				Color positionColor = new Color(image.getRGB(column, line));
 
-				// get the values of RGB channel. RGB will always have the same
-				int red = positionColor.getRed();
+				// get the values of RGB channel. RGB will always have the same (gray scale)
+				int colorPixel = positionColor.getRed();
 
 				// update the pixel in the processed image with the ideal gray
 				// leval for that collor
-				Color newColor = new Color(q[red], q[red], q[red]);
+				Color newColor = new Color(q[colorPixel], q[colorPixel], q[colorPixel]);
 
 				resultImage.setRGB(column, line, newColor.getRGB());
 
@@ -324,7 +323,7 @@ public class PDI {
 
 		int colorSize = 256;
 
-		int nivelSize = colorSize / finalColorSize;
+		int levelSize = colorSize / finalColorSize;
 
 		// run for each pixel of the image
 		for (int line = 0; line < imageHeight; line++) {
@@ -332,10 +331,11 @@ public class PDI {
 
 				// get the color of the pixel
 				Color positionColor = new Color(image.getRGB(column, line));
-
+				
+				//gray scale.. RGB is always the same
 				int color = positionColor.getRed();
 
-				int valueColor = (int) (color / nivelSize) * nivelSize;
+				int valueColor = (int) (color / levelSize) * levelSize;
 
 				valueColor = Utils.checkBoundaries(valueColor);
 
@@ -395,25 +395,40 @@ public class PDI {
 
 		return resultImage;
 	}
-
+	
+	
+	/**
+	 * Applies the mean filter to a image (reduce noise)
+	 * @param image Target image
+	 * @param kernel Object that represents the kernel with information about the size and width and height
+	 * @return processed image
+	 */
 	public BufferedImage meanFilter(BufferedImage image, Mask kernel) {
-
+		
+		//create result image
 		BufferedImage resultImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
 		
-		double meanFilter = 1 / (kernel.getHeight() * kernel.getWidth());
+		//kernel dimensions
+		int kernelWidith = kernel.getWidth();
+		int kernelHeight = kernel.getHeight();
 		
-		double[][] weights = new double [kernel.getWidth()][kernel.getHeight()];
+		// mean filter is always 1/ (width x height) of the kernel
+		double meanFilter;
+		meanFilter = (double) 1 / (kernelWidith * kernelHeight);
 		
+		//weights is a matrix with kernel size
+		double[][] weights = new double [kernelWidith][kernelHeight];
+		
+		//fulfill the matrix with the values of the meanFilter
 		for(int i= 0; i< kernel.getWidth(); i++)
-			for(int j = 0; j < kernel.getHeight(); j++){
-				System.out.println(meanFilter);
+			for(int j = 0; j < kernel.getHeight(); j++)
 				weights[i][j] = meanFilter;
-			}
+			
 		
-
-		// define kernel and set weights
+		//set the weights to the kernel
 		kernel.setWeights(weights);
-
+		
+		//creates convolution object
 		Convolution c = new Convolution(kernel);
 
 		// get the image dimensions
@@ -423,10 +438,12 @@ public class PDI {
 		// run for each pixel of the image
 		for (int line = 0; line < imageHeight; line++) {
 			for (int column = 0; column < imageWidth; column++) {
-
+				
+				//color after apply the mean filter
 				int newColor;
-
-				newColor = c.pixelConvolution(image, line, column, kernel);
+				
+				//operation in one pixel
+				newColor = c.pixelMeanConvolution(image, line, column, kernel);
 
 				// gray scale RGB is always the same
 				Color color = new Color(newColor, newColor, newColor);
@@ -439,4 +456,45 @@ public class PDI {
 		return resultImage;
 	}
 
+	
+	
+	
+	/**
+	 * Applies the mean filter to a image (reduce noise)
+	 * @param image Target image
+	 * @param kernel Object that represents the kernel with information about the size and width and height
+	 * @return processed image
+	 */
+	public BufferedImage medianFilter(BufferedImage image, Mask kernel) {
+		
+		//create result image
+		BufferedImage resultImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
+						
+		//creates convolution object
+		Convolution c = new Convolution(kernel);
+
+		// get the image dimensions
+		int imageHeight = image.getHeight();
+		int imageWidth = image.getWidth();
+
+		// run for each pixel of the image
+		for (int line = 0; line < imageHeight; line++) {
+			for (int column = 0; column < imageWidth; column++) {
+				
+				//color after apply the mean filter
+				int newColor;
+				
+				//operation in one pixel
+				newColor = c.pixelMedianConvolution(image, line, column, kernel);
+
+				// gray scale RGB is always the same
+				Color color = new Color(newColor, newColor, newColor);
+
+				// update the value in result image
+				resultImage.setRGB(column, line, color.getRGB());
+			}
+		}
+
+		return resultImage;
+	}
 }
