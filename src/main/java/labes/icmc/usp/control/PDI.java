@@ -6,6 +6,7 @@ import java.util.Random;
 
 import labes.icmc.usp.model.Mask;
 
+
 /**
  * This class handles digital image process operations
  * 
@@ -403,29 +404,13 @@ public class PDI {
 	 * @param kernel Object that represents the kernel with information about the size and width and height
 	 * @return processed image
 	 */
-	public BufferedImage meanFilter(BufferedImage image, Mask kernel) {
+	public BufferedImage convolutionFilter(BufferedImage image, Mask kernel, double[][] weights) {
 		
 		//create result image
 		BufferedImage resultImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
 		
-		//kernel dimensions
-		int kernelWidith = kernel.getWidth();
-		int kernelHeight = kernel.getHeight();
 		
-		// mean filter is always 1/ (width x height) of the kernel
-		double meanFilter;
-		meanFilter = (double) 1 / (kernelWidith * kernelHeight);
-		
-		//weights is a matrix with kernel size
-		double[][] weights = new double [kernelWidith][kernelHeight];
-		
-		//fulfill the matrix with the values of the meanFilter
-		for(int i= 0; i< kernel.getWidth(); i++)
-			for(int j = 0; j < kernel.getHeight(); j++)
-				weights[i][j] = meanFilter;
-			
-		
-		//set the weights to the kernel
+		//set weights
 		kernel.setWeights(weights);
 		
 		//creates convolution object
@@ -443,7 +428,7 @@ public class PDI {
 				int newColor;
 				
 				//operation in one pixel
-				newColor = c.pixelMeanConvolution(image, line, column, kernel);
+				newColor = c.pixelConvolution(image, line, column, kernel);
 
 				// gray scale RGB is always the same
 				Color color = new Color(newColor, newColor, newColor);
@@ -485,7 +470,7 @@ public class PDI {
 				int newColor;
 				
 				//operation in one pixel
-				newColor = c.pixelMedianConvolution(image, line, column, kernel);
+				newColor = c.medianConvolution(image, line, column, kernel);
 
 				// gray scale RGB is always the same
 				Color color = new Color(newColor, newColor, newColor);

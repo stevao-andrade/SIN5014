@@ -23,7 +23,6 @@ import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.coobird.thumbnailator.Thumbnails;
-
 import labes.icmc.usp.control.Histogram;
 import labes.icmc.usp.control.PDI;
 import labes.icmc.usp.control.Utils;
@@ -310,7 +309,24 @@ public class PDIView {
 					BufferedImage meanImage = null;
 					Mask kernel = new Mask(KERNEL_SIZE, KERNEL_SIZE);
 					
-					meanImage = pdi.meanFilter(processedImage, kernel);
+					// mean filter is always 1/ (width x height) of the kernel
+					double meanFilter;
+					meanFilter = (double) 1 / (kernel.getWidth() * kernel.getHeight());
+					
+					//weights is a matrix with kernel size
+					double[][] weights = new double [kernel.getWidth()][kernel.getHeight()];
+					
+					//fulfill the matrix with the values of the meanFilter
+					for(int i= 0; i< kernel.getWidth(); i++)
+						for(int j = 0; j < kernel.getHeight(); j++)
+							weights[i][j] = meanFilter;
+						
+					
+					//set the weights to the kernel
+					kernel.setWeights(weights);
+
+					
+					meanImage = pdi.convolutionFilter(processedImage, kernel, weights);
 
 					processedImage = meanImage;
 					resizeDisplay(processedImage, imageLabel);
@@ -379,15 +395,74 @@ public class PDIView {
 		btnEqualization.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/equalizer.png")));
 		btnEqualization.setBounds(362, 0, 51, 38);
 		frmSin.getContentPane().add(btnEqualization);
+		
+		
+		//high pass filter
+		JButton btnHighPassFilter = new JButton("");
+		btnHighPassFilter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				
+				if (image == null) {
 
-		JButton btnLowPassFilter = new JButton("");
-		btnLowPassFilter.setToolTipText("Low Pass Filter");
-		btnLowPassFilter
+					JOptionPane.showMessageDialog(null, "Open a image first!");
+				} else {
+
+					BufferedImage highImage = null;
+					Mask kernel = new Mask(KERNEL_SIZE, KERNEL_SIZE);
+					
+					
+					//weights is a matrix with kernel size -> Highpass filter
+					double[][] weights = {{-1,-1,-1},{-1,8,-1},{-1,-1,-1}};
+										
+					//set the weights to the kernel
+					kernel.setWeights(weights);
+
+					highImage = pdi.convolutionFilter(processedImage, kernel, weights);
+
+					processedImage = highImage;
+					resizeDisplay(processedImage, imageLabel);
+
+				}
+				
+			}
+		});
+		btnHighPassFilter.setToolTipText("High Pass Filter");
+		btnHighPassFilter
 				.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/low_frequency.png")));
-		btnLowPassFilter.setBounds(611, 0, 51, 38);
-		frmSin.getContentPane().add(btnLowPassFilter);
-
+		btnHighPassFilter.setBounds(611, 0, 51, 38);
+		frmSin.getContentPane().add(btnHighPassFilter);
+		
+		
+		//border filter
 		JButton btnBorderOperator = new JButton("");
+		btnBorderOperator.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if (image == null) {
+
+					JOptionPane.showMessageDialog(null, "Open a image first!");
+				} else {
+
+					BufferedImage borderImage = null;
+					Mask kernel = new Mask(KERNEL_SIZE, KERNEL_SIZE);
+					
+					
+					//weights is a matrix with kernel size -> Sobel upright border detector
+					double[][] weights = {{1,2,1},{0,0,0},{-1,-2,-1}};
+										
+					//set the weights to the kernel
+					kernel.setWeights(weights);
+
+					borderImage = pdi.convolutionFilter(processedImage, kernel, weights);
+
+					processedImage = borderImage;
+					resizeDisplay(processedImage, imageLabel);
+
+				}
+				
+			}
+		});
 		btnBorderOperator.setToolTipText("Border Operator");
 		btnBorderOperator.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/border.png")));
 		btnBorderOperator.setBounds(672, 0, 51, 38);

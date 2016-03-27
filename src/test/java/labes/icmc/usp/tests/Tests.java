@@ -1,6 +1,5 @@
 package labes.icmc.usp.tests;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +21,7 @@ import labes.icmc.usp.model.Mask;
  */
 public class Tests {
 
-	static String path = "src\\main\\java\\labes\\icmc\\usp\\resources\\black.png.jpg";
+	static String path = "src\\main\\java\\labes\\icmc\\usp\\resources\\black.png";
 	
 	static PDI pdi;
 	Histogram h;

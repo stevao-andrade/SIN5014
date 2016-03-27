@@ -50,7 +50,7 @@ public class Convolution {
 	 * @param kernel
 	 *            mask that wants to apply into the pixel
 	 */
-	public int pixelMeanConvolution(BufferedImage image, int imgLine, int imgColumn, Mask kernel) {
+	public int pixelConvolution(BufferedImage image, int imgLine, int imgColumn, Mask kernel) {
 
 		int kernelWidth = kernel.getWidth();
 		int kernelHeigth = kernel.getHeight();
@@ -101,7 +101,7 @@ public class Convolution {
 	 * @param kernel Mask used in the filter
 	 * @return
 	 */
-	public int pixelMedianConvolution(BufferedImage image, int imgLine, int imgColumn, Mask kernel) {
+	public int medianConvolution(BufferedImage image, int imgLine, int imgColumn, Mask kernel) {
 
 		int kernelWidth = kernel.getWidth();
 		int kernelHeigth = kernel.getHeight();
