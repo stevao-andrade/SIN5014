@@ -12,20 +12,20 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.text.NumberFormatter;
 
-public class IntensityViewer extends JDialog {
+public class ConfigurationDialog extends JDialog {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JFormattedTextField formattedTextField;
+	private JFormattedTextField intensityTextField;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			IntensityViewer dialog = new IntensityViewer();
+			ConfigurationDialog dialog = new ConfigurationDialog();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -36,15 +36,15 @@ public class IntensityViewer extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public IntensityViewer() {
+	public ConfigurationDialog() {
 		setResizable(false);
 		setModal(true);
-		setTitle("Change the intensity value (Default = 10)");
-		setBounds(100, 100, 345, 127);
+		setTitle("Change default configuration values");
+		setBounds(100, 100, 500, 400);
 		getContentPane().setLayout(null);
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(10, 59, 316, 33);
+			buttonPane.setBounds(10, 327, 474, 33);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane);
 			{ // update the intensity value
@@ -54,7 +54,7 @@ public class IntensityViewer extends JDialog {
 
 						// get the new value of intensity
 						int newIntensity;
-						newIntensity = Integer.parseInt(formattedTextField.getText());
+						newIntensity = Integer.parseInt(intensityTextField.getText());
 						System.out.println(newIntensity);
 
 					}
@@ -77,9 +77,9 @@ public class IntensityViewer extends JDialog {
 			}
 		}
 
-		JLabel lblIntensityValue = new JLabel("Intensity Value:");
-		lblIntensityValue.setBounds(10, 31, 86, 14);
-		getContentPane().add(lblIntensityValue);
+		JLabel lblIntensity = new JLabel("Intensity value (Default = 10):");
+		lblIntensity.setBounds(10, 31, 166, 14);
+		getContentPane().add(lblIntensity);
 
 		// Define the format to accept just numbers
 		NumberFormat longFormat = NumberFormat.getIntegerInstance();
@@ -89,8 +89,16 @@ public class IntensityViewer extends JDialog {
 		numberFormatter.setAllowsInvalid(false); // this is the key!!
 		numberFormatter.setMinimum(0l); // Optional
 
-		formattedTextField = new JFormattedTextField(numberFormatter);
-		formattedTextField.setBounds(92, 28, 76, 20);
+		intensityTextField = new JFormattedTextField(numberFormatter);
+		intensityTextField.setBounds(186, 28, 76, 20);
+		getContentPane().add(intensityTextField);
+		
+		JLabel lblKernelSizedefault = new JLabel("Kernel size (Default = 3x3)");
+		lblKernelSizedefault.setBounds(10, 62, 155, 14);
+		getContentPane().add(lblKernelSizedefault);
+		
+		JFormattedTextField formattedTextField = new JFormattedTextField();
+		formattedTextField.setBounds(186, 59, 76, 20);
 		getContentPane().add(formattedTextField);
 	}
 }

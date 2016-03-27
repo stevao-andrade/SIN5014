@@ -26,6 +26,7 @@ import net.coobird.thumbnailator.Thumbnails;
 
 import labes.icmc.usp.control.Histogram;
 import labes.icmc.usp.control.PDI;
+import labes.icmc.usp.control.Utils;
 
 public class PDIView {
 
@@ -142,7 +143,6 @@ public class PDIView {
 					try {
 
 						ImageIO.write(processedImage, "jpg", file);
-						System.out.println(file.getPath());
 
 					} catch (Exception e1) {
 						JOptionPane.showMessageDialog(null, "Can't save the file");
@@ -155,7 +155,7 @@ public class PDIView {
 		mnFile.add(mntmSave);
 		mnFile.add(mntmExit);
 
-		JMenu mnIntensity = new JMenu("Intensity");
+		JMenu mnIntensity = new JMenu("Setup");
 		menuBar.add(mnIntensity);
 
 		// change the intensity value
@@ -163,7 +163,7 @@ public class PDIView {
 		mntmConfiguration.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
-				IntensityViewer intensityDialog = new IntensityViewer();
+				ConfigurationDialog intensityDialog = new ConfigurationDialog();
 
 				intensityDialog.setVisible(true);
 
@@ -194,11 +194,7 @@ public class PDIView {
 					int[] array;
 
 					// get the frequency of each color and store into a array
-					array = pdi.getFrequencyToHistogram(processedImage);
-
-					for (int i : array) {
-						System.out.println(i);
-					}
+					array = Utils.getFrequencyToHistogram(processedImage);
 
 					Histogram h = new Histogram("Frequency Histogram", "Frequency Histogram", array);
 					h.pack();
@@ -208,8 +204,7 @@ public class PDIView {
 			}
 		});
 		btnHistogram.setToolTipText("Histogram");
-		btnHistogram
-				.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/histogram.png")));
+		btnHistogram.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/histogram.png")));
 		btnHistogram.setBounds(0, 0, 51, 38);
 		frmSin.getContentPane().add(btnHistogram);
 
@@ -285,8 +280,7 @@ public class PDIView {
 			}
 		});
 		btnIntensityDown.setToolTipText("Intensity Down");
-		btnIntensityDown
-				.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/down.png")));
+		btnIntensityDown.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/down.png")));
 		btnIntensityDown.setBounds(179, 0, 51, 38);
 		frmSin.getContentPane().add(btnIntensityDown);
 
@@ -298,29 +292,46 @@ public class PDIView {
 
 		JButton btnMedianFilter = new JButton("");
 		btnMedianFilter.setToolTipText("Median Filter");
-		btnMedianFilter
-				.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/median.png")));
+		btnMedianFilter.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/median.png")));
 		btnMedianFilter.setBounds(301, 0, 51, 38);
 		frmSin.getContentPane().add(btnMedianFilter);
 
+		// equalize a image
 		JButton btnEqualization = new JButton("");
+		btnEqualization.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				if (image == null) {
+
+					JOptionPane.showMessageDialog(null, "Open a image first!");
+				} else {
+
+					BufferedImage equalizedImage = null;
+
+					equalizedImage = pdi.imageEqualization(processedImage);
+
+					processedImage = equalizedImage;
+					resizeDisplay(processedImage, imageLabel);
+
+				}
+
+			}
+		});
 		btnEqualization.setToolTipText("Equalizer");
-		btnEqualization
-				.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/equalizer.png")));
+		btnEqualization.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/equalizer.png")));
 		btnEqualization.setBounds(362, 0, 51, 38);
 		frmSin.getContentPane().add(btnEqualization);
 
 		JButton btnLowPassFilter = new JButton("");
 		btnLowPassFilter.setToolTipText("Low Pass Filter");
-		btnLowPassFilter.setIcon(
-				new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/low_frequency.png")));
+		btnLowPassFilter
+				.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/low_frequency.png")));
 		btnLowPassFilter.setBounds(423, 0, 51, 38);
 		frmSin.getContentPane().add(btnLowPassFilter);
 
 		JButton btnBorderOperator = new JButton("");
 		btnBorderOperator.setToolTipText("Border Operator");
-		btnBorderOperator
-				.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/border.png")));
+		btnBorderOperator.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/border.png")));
 		btnBorderOperator.setBounds(484, 0, 51, 38);
 		frmSin.getContentPane().add(btnBorderOperator);
 

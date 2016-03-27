@@ -14,6 +14,7 @@ import org.junit.Test;
 import labes.icmc.usp.control.Convolution;
 import labes.icmc.usp.control.Histogram;
 import labes.icmc.usp.control.PDI;
+import labes.icmc.usp.control.Utils;
 import labes.icmc.usp.model.Mask;
 
 /**
@@ -48,7 +49,7 @@ public class Tests {
 		int[] array;
 
 		// get the frequency of each color and store into a array
-		array = pdi.getFrequencyToHistogram(image);
+		array = Utils.getFrequencyToHistogram(image);
 
 		// plotting
 		h = new Histogram("Frequency Histogram", "Frequency Histogram", array);
