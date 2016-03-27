@@ -97,16 +97,24 @@ public class ConfigurationDialog extends JDialog {
 		lblKernelSizedefault.setBounds(10, 62, 155, 14);
 		getContentPane().add(lblKernelSizedefault);
 		
-		JFormattedTextField formattedTextField = new JFormattedTextField();
-		formattedTextField.setBounds(255, 59, 76, 20);
-		getContentPane().add(formattedTextField);
+		JFormattedTextField kernelTextField = new JFormattedTextField();
+		kernelTextField.setBounds(255, 59, 76, 20);
+		getContentPane().add(kernelTextField);
 		
-		JLabel lblNewLabel = new JLabel("Quantization level (Default = 128, Max = 256)");
+		JLabel lblNewLabel = new JLabel("Quantization level (Default = 25, Max = 256)");
 		lblNewLabel.setBounds(10, 93, 235, 14);
 		getContentPane().add(lblNewLabel);
 		
-		JFormattedTextField formattedTextField_1 = new JFormattedTextField();
-		formattedTextField_1.setBounds(255, 90, 76, 20);
-		getContentPane().add(formattedTextField_1);
+		JFormattedTextField quantizationTextField = new JFormattedTextField();
+		quantizationTextField.setBounds(255, 90, 76, 20);
+		getContentPane().add(quantizationTextField);
+		
+		JLabel lblNewLabel_1 = new JLabel("Color descolaction (Spliting, Default = 5)");
+		lblNewLabel_1.setBounds(10, 124, 215, 14);
+		getContentPane().add(lblNewLabel_1);
+		
+		JFormattedTextField formattedTextField = new JFormattedTextField();
+		formattedTextField.setBounds(255, 121, 76, 20);
+		getContentPane().add(formattedTextField);
 	}
 }

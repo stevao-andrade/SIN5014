@@ -387,7 +387,28 @@ public class PDIView {
 		btnQuantization.setBounds(423, 0, 51, 38);
 		frmSin.getContentPane().add(btnQuantization);
 		
+		
+		//image splitting
 		JButton btnSpliting = new JButton("");
+		btnSpliting.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if (image == null) {
+
+					JOptionPane.showMessageDialog(null, "Open a image first!");
+				} else {
+
+					BufferedImage splitImage = null;
+					
+					//this parameters need to be controllable
+					splitImage = pdi.splitImage(processedImage, 128, 20);
+
+					processedImage = splitImage;
+					resizeDisplay(processedImage, imageLabel);
+
+				}
+			}
+		});
 		btnSpliting.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/split.png")));
 		btnSpliting.setToolTipText("Spliting");
 		btnSpliting.setBounds(484, 0, 51, 38);

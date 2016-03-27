@@ -297,7 +297,13 @@ public class PDI {
 
 		return resultImage;
 	}
-
+	
+	/**
+	 * Add quantization algorithm to a image
+	 * @param image Target image
+	 * @param finalColorSize Defines the number of colors that will be considered in the result image
+	 * @return quantized image
+	 */
 	public BufferedImage quantizationImage(BufferedImage image, int finalColorSize) {
 
 		// get the image dimensions
@@ -336,4 +342,50 @@ public class PDI {
 		return resultImage;
 	}
 
+	
+	/**
+	 * Apply splitting algorithm to a image
+	 * @param image Target image
+	 * @param finalColorSize
+	 * @return
+	 */
+	public BufferedImage splitImage(BufferedImage image,int colorD ,int displacement) {
+
+		// get the image dimensions
+		int imageHeight = image.getHeight();
+		int imageWidth = image.getWidth();
+
+		// set the image to gray scale
+		BufferedImage resultImage = null;
+		resultImage = setGrayScale(image);
+		
+		
+
+		// run for each pixel of the image
+		for (int line = 0; line < imageHeight; line++) {
+			for (int column = 0; column < imageWidth; column++) {
+				
+				// get the color of the pixel
+				Color positionColor = new Color(image.getRGB(column, line));
+				
+				int color = positionColor.getRed();
+				
+				if(color < colorD){
+					color = color - displacement;
+					color = Utils.checkBoundaries(color);
+				}else{
+					color = color + displacement;
+					color = Utils.checkBoundaries(color);
+				}
+				
+				Color newColor = new Color(color, color, color);
+				
+				// set into resultImage
+				resultImage.setRGB(column, line, newColor.getRGB());
+				
+			}
+		}
+		
+		return resultImage;
+	}
 }
