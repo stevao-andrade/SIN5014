@@ -62,7 +62,7 @@ public class Tests {
 		
 		BufferedImage resultImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
 		
-		int [][] weights =  {{1,1,1},{0,0,1},{0,1,0}};
+		double [][] weights =  {{1,1,1},{0,0,1},{0,1,0}};
 
 		//define kernel and set weights
 		Mask kernel = new Mask(3, 3);

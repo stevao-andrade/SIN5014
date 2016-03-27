@@ -11,7 +11,7 @@ public class Mask {
 	private int width;
 	private int height;
 	
-	private int[][]  weights;
+	private double[][]  weights;
 	
 	
 	public Mask(int width, int heigth){
@@ -38,13 +38,13 @@ public class Mask {
 	 * @param column index of the kernel
 	 * @return weight for that position
 	 */
-	public int getWeight(int line, int column) {
+	public double getWeight(int line, int column) {
 		return weights[line][column];
 	}
 
 
 
-	public void setWeights(int[][] weights) {
+	public void setWeights(double[][] weights) {
 		this.weights = weights;
 	}
 	

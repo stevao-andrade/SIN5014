@@ -27,11 +27,28 @@ import net.coobird.thumbnailator.Thumbnails;
 import labes.icmc.usp.control.Histogram;
 import labes.icmc.usp.control.PDI;
 import labes.icmc.usp.control.Utils;
+import labes.icmc.usp.model.Mask;
 
 public class PDIView {
 
 	private final int WITDH_PANEL_SIZE = 682;
 	private final int HEIGHT_PANEL_SIZE = 477;
+	
+	//higher the value less noise
+	int INTERVAL_NOISE = 50;
+	
+	//intensity
+	int INTENSITY = 10;
+	
+	//mean
+	int KERNEL_SIZE = 3;
+	
+	//quantization
+	int FINAL_COLORS_NUMBER = 12;
+	
+	//splitting
+	int COLOR_DISPLACEMENT = 128;
+	int SPLITING_DISPLACEMENT = 20;
 
 	private JFrame frmSin;
 
@@ -40,12 +57,6 @@ public class PDIView {
 	BufferedImage image = null;
 	BufferedImage processedImage = null;
 
-	private int intensity = 10;
-
-	// set a new value to be used in intensity buttons
-	public void setIntensity(int intensity) {
-		this.intensity = intensity;
-	}
 
 	/**
 	 * Resize the loaded image to a pre defined resolution
@@ -244,8 +255,9 @@ public class PDIView {
 				} else {
 
 					BufferedImage intensityImage = null;
+					
 
-					intensityImage = pdi.changeColorIntensity(processedImage, intensity);
+					intensityImage = pdi.changeColorIntensity(processedImage, INTENSITY);
 					processedImage = intensityImage;
 					resizeDisplay(processedImage, imageLabel);
 
@@ -270,7 +282,7 @@ public class PDIView {
 
 					BufferedImage intensityImage = null;
 
-					intensityImage = pdi.changeColorIntensity(processedImage, -intensity);
+					intensityImage = pdi.changeColorIntensity(processedImage, (-INTENSITY));
 
 					processedImage = intensityImage;
 					resizeDisplay(processedImage, imageLabel);
@@ -283,8 +295,31 @@ public class PDIView {
 		btnIntensityDown.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/down.png")));
 		btnIntensityDown.setBounds(179, 0, 51, 38);
 		frmSin.getContentPane().add(btnIntensityDown);
-
+		
+		
+		//mean filter
 		JButton btnMeanFilter = new JButton("");
+		btnMeanFilter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if (image == null) {
+
+					JOptionPane.showMessageDialog(null, "Open a image first!");
+				} else {
+
+					BufferedImage meanImage = null;
+					Mask kernel = new Mask(KERNEL_SIZE, KERNEL_SIZE);
+					
+					meanImage = pdi.meanFilter(processedImage, kernel);
+
+					processedImage = meanImage;
+					resizeDisplay(processedImage, imageLabel);
+
+				}
+				
+				
+			}
+		});
 		btnMeanFilter.setToolTipText("Mean Filter");
 		btnMeanFilter.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/mean.png")));
 		btnMeanFilter.setBounds(240, 0, 51, 38);
@@ -346,8 +381,8 @@ public class PDIView {
 				} else {
 
 					BufferedImage noisedImage = null;
-
-					noisedImage = pdi.generateNoise(processedImage);
+										
+					noisedImage = pdi.generateNoise(processedImage, INTERVAL_NOISE);
 
 					processedImage = noisedImage;
 					resizeDisplay(processedImage, imageLabel);
@@ -374,7 +409,7 @@ public class PDIView {
 					BufferedImage quantizedImage = null;
 					
 					//this parameter should be controlled
-					quantizedImage = pdi.quantizationImage(processedImage, 12);
+					quantizedImage = pdi.quantizationImage(processedImage, FINAL_COLORS_NUMBER);
 
 					processedImage = quantizedImage;
 					resizeDisplay(processedImage, imageLabel);
@@ -401,7 +436,7 @@ public class PDIView {
 					BufferedImage splitImage = null;
 					
 					//this parameters need to be controllable
-					splitImage = pdi.splitImage(processedImage, 128, 20);
+					splitImage = pdi.splitImage(processedImage, COLOR_DISPLACEMENT, SPLITING_DISPLACEMENT);
 
 					processedImage = splitImage;
 					resizeDisplay(processedImage, imageLabel);

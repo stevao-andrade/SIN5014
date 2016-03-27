@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+import labes.icmc.usp.model.Mask;
+
 /**
  * This class handles digital image process operations
  * 
@@ -109,7 +111,7 @@ public class PDI {
 	 *            image that wants to apply noise
 	 * @return image with a noise effect
 	 */
-	public BufferedImage generateNoise(BufferedImage image) {
+	public BufferedImage generateNoise(BufferedImage image, int interval) {
 
 		// get the image dimensions
 		int imageHeight = image.getHeight();
@@ -142,7 +144,7 @@ public class PDI {
 				noise = red;
 
 				// generate a random value between 0 and 10
-				int x = rand.nextInt(21);
+				int x = rand.nextInt(interval);
 
 				// set noise?
 				if (x == 0) { // if x == 0 set a black noise into the image
@@ -285,7 +287,9 @@ public class PDI {
 
 				// define a new value to position pixel
 				positionPixel = Math.abs(positionPixel - positionPixel2) + Math.abs(positionPixel - positionPixel3);
-
+				
+				positionPixel = Utils.checkBoundaries(positionPixel);
+				
 				// define a new color with the positionPixel
 				Color newColor = new Color(positionPixel, positionPixel, positionPixel);
 
@@ -297,11 +301,15 @@ public class PDI {
 
 		return resultImage;
 	}
-	
+
 	/**
 	 * Add quantization algorithm to a image
-	 * @param image Target image
-	 * @param finalColorSize Defines the number of colors that will be considered in the result image
+	 * 
+	 * @param image
+	 *            Target image
+	 * @param finalColorSize
+	 *            Defines the number of colors that will be considered in the
+	 *            result image
 	 * @return quantized image
 	 */
 	public BufferedImage quantizationImage(BufferedImage image, int finalColorSize) {
@@ -313,43 +321,44 @@ public class PDI {
 		// set the image to gray scale
 		BufferedImage resultImage = null;
 		resultImage = setGrayScale(image);
-		
+
 		int colorSize = 256;
-		
-		int nivelSize = colorSize/finalColorSize;
+
+		int nivelSize = colorSize / finalColorSize;
 
 		// run for each pixel of the image
 		for (int line = 0; line < imageHeight; line++) {
 			for (int column = 0; column < imageWidth; column++) {
-				
+
 				// get the color of the pixel
 				Color positionColor = new Color(image.getRGB(column, line));
-				
+
 				int color = positionColor.getRed();
-				
-				int valueColor = (int) (color/nivelSize) * nivelSize;
-				
+
+				int valueColor = (int) (color / nivelSize) * nivelSize;
+
 				valueColor = Utils.checkBoundaries(valueColor);
-				
+
 				Color newColor = new Color(valueColor, valueColor, valueColor);
-				
+
 				// set into resultImage
 				resultImage.setRGB(column, line, newColor.getRGB());
-				
+
 			}
 		}
-		
+
 		return resultImage;
 	}
 
-	
 	/**
 	 * Apply splitting algorithm to a image
-	 * @param image Target image
+	 * 
+	 * @param image
+	 *            Target image
 	 * @param finalColorSize
 	 * @return
 	 */
-	public BufferedImage splitImage(BufferedImage image,int colorD ,int displacement) {
+	public BufferedImage splitImage(BufferedImage image, int colorD, int displacement) {
 
 		// get the image dimensions
 		int imageHeight = image.getHeight();
@@ -358,34 +367,76 @@ public class PDI {
 		// set the image to gray scale
 		BufferedImage resultImage = null;
 		resultImage = setGrayScale(image);
-		
-		
 
 		// run for each pixel of the image
 		for (int line = 0; line < imageHeight; line++) {
 			for (int column = 0; column < imageWidth; column++) {
-				
+
 				// get the color of the pixel
 				Color positionColor = new Color(image.getRGB(column, line));
-				
+
 				int color = positionColor.getRed();
-				
-				if(color < colorD){
+
+				if (color < colorD) {
 					color = color - displacement;
 					color = Utils.checkBoundaries(color);
-				}else{
+				} else {
 					color = color + displacement;
 					color = Utils.checkBoundaries(color);
 				}
-				
+
 				Color newColor = new Color(color, color, color);
-				
+
 				// set into resultImage
 				resultImage.setRGB(column, line, newColor.getRGB());
-				
+
 			}
 		}
-		
+
 		return resultImage;
 	}
+
+	public BufferedImage meanFilter(BufferedImage image, Mask kernel) {
+
+		BufferedImage resultImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
+		
+		double meanFilter = 1 / (kernel.getHeight() * kernel.getWidth());
+		
+		double[][] weights = new double [kernel.getWidth()][kernel.getHeight()];
+		
+		for(int i= 0; i< kernel.getWidth(); i++)
+			for(int j = 0; j < kernel.getHeight(); j++){
+				System.out.println(meanFilter);
+				weights[i][j] = meanFilter;
+			}
+		
+
+		// define kernel and set weights
+		kernel.setWeights(weights);
+
+		Convolution c = new Convolution(kernel);
+
+		// get the image dimensions
+		int imageHeight = image.getHeight();
+		int imageWidth = image.getWidth();
+
+		// run for each pixel of the image
+		for (int line = 0; line < imageHeight; line++) {
+			for (int column = 0; column < imageWidth; column++) {
+
+				int newColor;
+
+				newColor = c.pixelConvolution(image, line, column, kernel);
+
+				// gray scale RGB is always the same
+				Color color = new Color(newColor, newColor, newColor);
+
+				// update the value in result image
+				resultImage.setRGB(column, line, color.getRGB());
+			}
+		}
+
+		return resultImage;
+	}
+
 }

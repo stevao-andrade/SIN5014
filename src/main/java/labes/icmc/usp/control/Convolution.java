@@ -67,7 +67,7 @@ public class Convolution {
 					int point = color.getRed();
 					
 					// apply operation to pixel
-					weight = weight + point * kernel.getWeight(kernelLine, kernelColumn);
+					weight = (int) (weight + point * kernel.getWeight(kernelLine, kernelColumn));
 
 					// check if it's a valid value
 					weight = Utils.checkBoundaries(weight);
