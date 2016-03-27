@@ -374,6 +374,25 @@ public class PDIView {
 		frmSin.getContentPane().add(btnSpliting);
 		
 		JButton btnGradient = new JButton("");
+		btnGradient.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				if (image == null) {
+
+					JOptionPane.showMessageDialog(null, "Open a image first!");
+				} else {
+
+					BufferedImage gradientImage = null;
+
+					gradientImage = pdi.gradientImage(processedImage);
+
+					processedImage = gradientImage;
+					resizeDisplay(processedImage, imageLabel);
+
+				}
+			}
+				
+		});
 		btnGradient.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/gradient.png")));
 		btnGradient.setToolTipText("Gradient");
 		btnGradient.setBounds(550, 0, 51, 38);

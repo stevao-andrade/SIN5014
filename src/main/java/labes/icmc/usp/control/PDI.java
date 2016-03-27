@@ -243,7 +243,7 @@ public class PDI {
 	 * @return processed image
 	 */
 	
-	public BufferedImage imageGradient(BufferedImage image){
+	public BufferedImage gradientImage(BufferedImage image){
 		
 		// get the image dimensions
 		int imageHeight = image.getHeight();
