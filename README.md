@@ -6,3 +6,5 @@ The aim of this project is to develop a set of filters to help tasks related to 
 The main references used on the development of this project can be found at:
 
 GONZALEZ, RAFAEL C. e WOODS, RICHARD E.; Digital image processing. Massachusets: Addison-Wesley, 1993. 716p.
+
+This project was created using Eclipse. In order to use it, import as a Maven project.
