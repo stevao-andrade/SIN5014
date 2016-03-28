@@ -1,10 +1,12 @@
-package labes.icmc.usp.control;
+package usp.icmc.labes.control;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-import labes.icmc.usp.model.Mask;
+import usp.icmc.labes.model.Mask;
+
+
 
 
 /**

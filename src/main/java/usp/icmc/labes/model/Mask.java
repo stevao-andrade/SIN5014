@@ -1,4 +1,4 @@
-package labes.icmc.usp.model;
+package usp.icmc.labes.model;
 
 
 /**

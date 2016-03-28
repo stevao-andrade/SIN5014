@@ -1,4 +1,4 @@
-package labes.icmc.usp.tests;
+package usp.icmc.labes.tests;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -10,11 +10,13 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import labes.icmc.usp.control.Convolution;
-import labes.icmc.usp.control.Histogram;
-import labes.icmc.usp.control.PDI;
-import labes.icmc.usp.control.Utils;
-import labes.icmc.usp.model.Mask;
+import usp.icmc.labes.control.Convolution;
+import usp.icmc.labes.control.Histogram;
+import usp.icmc.labes.control.PDI;
+import usp.icmc.labes.control.Utils;
+import usp.icmc.labes.model.Mask;
+
+
 
 /**
  * Unit tests
@@ -26,7 +28,8 @@ public class Tests {
 	static PDI pdi;
 	Histogram h;
 	static BufferedImage image;
-
+	
+	@Ignore
 	@BeforeClass
 	public static void setUp() {
 
@@ -56,6 +59,7 @@ public class Tests {
 		h.setVisible(true);
 	}
 	
+	@Ignore
 	@Test
 	public void convolutionBoundariesTest(){
 		

@@ -1,4 +1,4 @@
-package labes.icmc.usp.control;
+package usp.icmc.labes.control;
 
 import java.awt.Color;
 import java.awt.Font;

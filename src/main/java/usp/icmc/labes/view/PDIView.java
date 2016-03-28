@@ -1,4 +1,4 @@
-package labes.icmc.usp.view;
+package usp.icmc.labes.view;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -22,11 +22,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+
 import net.coobird.thumbnailator.Thumbnails;
-import labes.icmc.usp.control.Histogram;
-import labes.icmc.usp.control.PDI;
-import labes.icmc.usp.control.Utils;
-import labes.icmc.usp.model.Mask;
+import usp.icmc.labes.control.Histogram;
+import usp.icmc.labes.control.PDI;
+import usp.icmc.labes.control.Utils;
+import usp.icmc.labes.model.Mask;
+
 
 public class PDIView {
 
@@ -214,7 +216,7 @@ public class PDIView {
 			}
 		});
 		btnHistogram.setToolTipText("Histogram");
-		btnHistogram.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/histogram.png")));
+		btnHistogram.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/histogram.png")));
 		btnHistogram.setBounds(0, 0, 51, 38);
 		frmSin.getContentPane().add(btnHistogram);
 
@@ -239,7 +241,7 @@ public class PDIView {
 			}
 		});
 		btnGrayScale.setToolTipText("Gray Scale");
-		btnGrayScale.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/gray.png")));
+		btnGrayScale.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/gray.png")));
 		btnGrayScale.setBounds(57, 0, 51, 38);
 		frmSin.getContentPane().add(btnGrayScale);
 
@@ -265,7 +267,7 @@ public class PDIView {
 			}
 		});
 		btnIntensityUp.setToolTipText("Intensity Up");
-		btnIntensityUp.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/up.png")));
+		btnIntensityUp.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/up.png")));
 		btnIntensityUp.setBounds(118, 0, 51, 38);
 		frmSin.getContentPane().add(btnIntensityUp);
 
@@ -291,7 +293,7 @@ public class PDIView {
 			}
 		});
 		btnIntensityDown.setToolTipText("Intensity Down");
-		btnIntensityDown.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/down.png")));
+		btnIntensityDown.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/down.png")));
 		btnIntensityDown.setBounds(179, 0, 51, 38);
 		frmSin.getContentPane().add(btnIntensityDown);
 		
@@ -337,7 +339,7 @@ public class PDIView {
 			}
 		});
 		btnMeanFilter.setToolTipText("Mean Filter");
-		btnMeanFilter.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/mean.png")));
+		btnMeanFilter.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/mean.png")));
 		btnMeanFilter.setBounds(240, 0, 51, 38);
 		frmSin.getContentPane().add(btnMeanFilter);
 		
@@ -366,7 +368,7 @@ public class PDIView {
 			}
 		});
 		btnMedianFilter.setToolTipText("Median Filter");
-		btnMedianFilter.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/median.png")));
+		btnMedianFilter.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/median.png")));
 		btnMedianFilter.setBounds(301, 0, 51, 38);
 		frmSin.getContentPane().add(btnMedianFilter);
 
@@ -392,7 +394,7 @@ public class PDIView {
 			}
 		});
 		btnEqualization.setToolTipText("Equalizer");
-		btnEqualization.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/equalizer.png")));
+		btnEqualization.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/equalizer.png")));
 		btnEqualization.setBounds(362, 0, 51, 38);
 		frmSin.getContentPane().add(btnEqualization);
 		
@@ -429,7 +431,7 @@ public class PDIView {
 		});
 		btnHighPassFilter.setToolTipText("High Pass Filter");
 		btnHighPassFilter
-				.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/low_frequency.png")));
+				.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/low_frequency.png")));
 		btnHighPassFilter.setBounds(611, 0, 51, 38);
 		frmSin.getContentPane().add(btnHighPassFilter);
 		
@@ -464,7 +466,7 @@ public class PDIView {
 			}
 		});
 		btnBorderOperator.setToolTipText("Border Operator");
-		btnBorderOperator.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/border.png")));
+		btnBorderOperator.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/border.png")));
 		btnBorderOperator.setBounds(672, 0, 51, 38);
 		frmSin.getContentPane().add(btnBorderOperator);
 
@@ -489,7 +491,7 @@ public class PDIView {
 
 			}
 		});
-		btnNoise.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/noise.png")));
+		btnNoise.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/noise.png")));
 		btnNoise.setToolTipText("Noise (Salt and pepper)");
 		btnNoise.setBounds(733, 0, 51, 38);
 		frmSin.getContentPane().add(btnNoise);
@@ -515,7 +517,7 @@ public class PDIView {
 				
 			}
 		});
-		btnQuantization.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/quantization.png")));
+		btnQuantization.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/quantization.png")));
 		btnQuantization.setToolTipText("Quantization");
 		btnQuantization.setBounds(423, 0, 51, 38);
 		frmSin.getContentPane().add(btnQuantization);
@@ -542,7 +544,7 @@ public class PDIView {
 				}
 			}
 		});
-		btnSpliting.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/split.png")));
+		btnSpliting.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/split.png")));
 		btnSpliting.setToolTipText("Spliting");
 		btnSpliting.setBounds(484, 0, 51, 38);
 		frmSin.getContentPane().add(btnSpliting);
@@ -567,7 +569,7 @@ public class PDIView {
 			}
 				
 		});
-		btnGradient.setIcon(new ImageIcon(PDIView.class.getResource("/labes/icmc/usp/resources/gradient.png")));
+		btnGradient.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/gradient.png")));
 		btnGradient.setToolTipText("Gradient");
 		btnGradient.setBounds(550, 0, 51, 38);
 		frmSin.getContentPane().add(btnGradient);

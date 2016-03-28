@@ -1,4 +1,4 @@
-package labes.icmc.usp.view;
+package usp.icmc.labes.view;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;

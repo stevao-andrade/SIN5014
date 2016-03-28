@@ -1,4 +1,4 @@
-package labes.icmc.usp.control;
+package usp.icmc.labes.control;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -6,7 +6,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import labes.icmc.usp.model.Mask;
+import usp.icmc.labes.model.Mask;
+
+
+
+
 
 /**
  * This class handles convolution operations
@@ -122,12 +126,14 @@ public class Convolution {
 					
 					// It's in gray scale, so RGB have always the same value
 					int point = color.getRed();
+					Integer objPoint = new Integer(point);
 					
-					pixels.add(point);
+					pixels.add(objPoint);
 				
 					//if pixel don't exist's add 0 to the list
 				} catch (ArrayIndexOutOfBoundsException e) {
-					pixels.add(0);
+					Integer objPoint = new Integer(0);
+					pixels.add(objPoint);
 				}
 			}
 		}
@@ -142,6 +148,7 @@ public class Convolution {
 		if (listSize % 2 == 0){
 			
 			int index = listSize/2;
+			
 			return pixels.get(index);
 			
 		}else{
