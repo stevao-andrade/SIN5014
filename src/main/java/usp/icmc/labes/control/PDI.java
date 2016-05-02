@@ -2,6 +2,8 @@ package usp.icmc.labes.control;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import usp.icmc.labes.model.Mask;
@@ -483,5 +485,55 @@ public class PDI {
 		}
 
 		return resultImage;
+	}
+	
+	
+	
+	/**
+	 * Applies the mean filter to a image (reduce noise)
+	 * @param image Target image
+	 * @param kernel Object that represents the kernel with information about the size and width and height
+	 * @return processed image
+	 */
+	public long lineDetector(BufferedImage image, Mask kernel, double[][] weights) {
+		
+		//create result image
+		BufferedImage resultImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
+		
+		
+		//set weights
+		kernel.setWeights(weights);
+		
+		//creates convolution object
+		Convolution c = new Convolution(kernel);
+
+		// get the image dimensions
+		int imageHeight = image.getHeight();
+		int imageWidth = image.getWidth();
+			
+		long totalColor = 0;
+		
+		// run for each pixel of the image
+		for (int line = 0; line < imageHeight; line++) {
+			for (int column = 0; column < imageWidth; column++) {
+				
+				//color after apply the mean filter
+				int newColor;
+				
+				//operation in one pixel
+				newColor = c.pixelConvolution(image, line, column, kernel);
+				totalColor = totalColor + newColor;
+								
+				// gray scale RGB is always the same
+				Color color = new Color(newColor, newColor, newColor);
+
+				// update the value in result image
+				resultImage.setRGB(column, line, color.getRGB());
+				
+				
+			}
+		}
+		
+		return totalColor;
 	}
 }

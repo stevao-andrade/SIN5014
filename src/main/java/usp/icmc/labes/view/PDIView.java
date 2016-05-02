@@ -8,6 +8,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -22,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.jfree.ui.HorizontalAlignment;
 
 import net.coobird.thumbnailator.Thumbnails;
 import usp.icmc.labes.control.Histogram;
@@ -32,8 +35,8 @@ import usp.icmc.labes.model.Mask;
 
 public class PDIView {
 
-	private final int WITDH_PANEL_SIZE = 682;
-	private final int HEIGHT_PANEL_SIZE = 477;
+	private final int WITDH_PANEL_SIZE = 750;
+	private final int HEIGHT_PANEL_SIZE = 600;
 	
 	//higher the value less noise
 	int INTERVAL_NOISE = 50;
@@ -66,15 +69,23 @@ public class PDIView {
 	 * @param labelToDisplay
 	 */
 	private void resizeDisplay(BufferedImage imageToResize, JLabel labelToDisplay) {
-
-		try {
-			processedImage = Thumbnails.of(imageToResize).size(WITDH_PANEL_SIZE, HEIGHT_PANEL_SIZE).asBufferedImage();
-		} catch (FileNotFoundException e) {
-			JOptionPane.showMessageDialog(null, "File Not Found.");
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Can't Read the File.");
+		
+		processedImage = imageToResize;
+		
+		int imageHeight = imageToResize.getHeight();
+		int imageWidth = imageToResize.getWidth();
+		
+		if( (imageHeight > HEIGHT_PANEL_SIZE) && ( imageWidth > WITDH_PANEL_SIZE)){
+			
+			try {
+				processedImage = Thumbnails.of(imageToResize).size(WITDH_PANEL_SIZE, HEIGHT_PANEL_SIZE).asBufferedImage();
+			} catch (FileNotFoundException e) {
+				JOptionPane.showMessageDialog(null, "File Not Found.");
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, "Can't Read the File.");
+			}
 		}
-
+		
 		// set into the label
 		labelToDisplay.setIcon(new ImageIcon(processedImage));
 	}
@@ -110,7 +121,7 @@ public class PDIView {
 		frmSin.getContentPane().setBackground(Color.LIGHT_GRAY);
 		frmSin.setTitle("SIN5014 - Fundamentos de Processamento Gr\u00E1fico (Stev\u00E3o Andrade)");
 		frmSin.setResizable(false);
-		frmSin.setBounds(100, 100, 800, 600);
+		frmSin.setBounds(100, 100, 900, 700);
 		frmSin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JMenuBar menuBar = new JMenuBar();
@@ -186,7 +197,7 @@ public class PDIView {
 
 		final JPanel originalPanel = new JPanel();
 		originalPanel.setBackground(Color.LIGHT_GRAY);
-		originalPanel.setBounds(67, 49, 682, 477);
+		originalPanel.setBounds(67, 49, 750, 600);
 		frmSin.getContentPane().add(originalPanel);
 
 		final JLabel imageLabel = new JLabel("");
@@ -217,7 +228,7 @@ public class PDIView {
 		});
 		btnHistogram.setToolTipText("Histogram");
 		btnHistogram.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/histogram.png")));
-		btnHistogram.setBounds(0, 0, 51, 38);
+		btnHistogram.setBounds(0, 0, 43, 38);
 		frmSin.getContentPane().add(btnHistogram);
 
 		// Set a image to gray scale
@@ -242,7 +253,7 @@ public class PDIView {
 		});
 		btnGrayScale.setToolTipText("Gray Scale");
 		btnGrayScale.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/gray.png")));
-		btnGrayScale.setBounds(57, 0, 51, 38);
+		btnGrayScale.setBounds(53, 0, 43, 38);
 		frmSin.getContentPane().add(btnGrayScale);
 
 		// increases the value of the intensity in the pixels of the image
@@ -268,7 +279,7 @@ public class PDIView {
 		});
 		btnIntensityUp.setToolTipText("Intensity Up");
 		btnIntensityUp.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/up.png")));
-		btnIntensityUp.setBounds(118, 0, 51, 38);
+		btnIntensityUp.setBounds(106, 0, 43, 38);
 		frmSin.getContentPane().add(btnIntensityUp);
 
 		// reduces the value of the intensity in the pixels of the image
@@ -294,7 +305,7 @@ public class PDIView {
 		});
 		btnIntensityDown.setToolTipText("Intensity Down");
 		btnIntensityDown.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/down.png")));
-		btnIntensityDown.setBounds(179, 0, 51, 38);
+		btnIntensityDown.setBounds(159, 0, 43, 38);
 		frmSin.getContentPane().add(btnIntensityDown);
 		
 		
@@ -340,7 +351,7 @@ public class PDIView {
 		});
 		btnMeanFilter.setToolTipText("Mean Filter");
 		btnMeanFilter.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/mean.png")));
-		btnMeanFilter.setBounds(240, 0, 51, 38);
+		btnMeanFilter.setBounds(212, 0, 43, 38);
 		frmSin.getContentPane().add(btnMeanFilter);
 		
 		
@@ -369,7 +380,7 @@ public class PDIView {
 		});
 		btnMedianFilter.setToolTipText("Median Filter");
 		btnMedianFilter.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/median.png")));
-		btnMedianFilter.setBounds(301, 0, 51, 38);
+		btnMedianFilter.setBounds(265, 0, 43, 38);
 		frmSin.getContentPane().add(btnMedianFilter);
 
 		// equalize a image
@@ -395,7 +406,7 @@ public class PDIView {
 		});
 		btnEqualization.setToolTipText("Equalizer");
 		btnEqualization.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/equalizer.png")));
-		btnEqualization.setBounds(362, 0, 51, 38);
+		btnEqualization.setBounds(318, 0, 43, 38);
 		frmSin.getContentPane().add(btnEqualization);
 		
 		
@@ -432,7 +443,7 @@ public class PDIView {
 		btnHighPassFilter.setToolTipText("High Pass Filter");
 		btnHighPassFilter
 				.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/low_frequency.png")));
-		btnHighPassFilter.setBounds(611, 0, 51, 38);
+		btnHighPassFilter.setBounds(530, 0, 43, 38);
 		frmSin.getContentPane().add(btnHighPassFilter);
 		
 		
@@ -450,9 +461,10 @@ public class PDIView {
 					Mask kernel = new Mask(KERNEL_SIZE, KERNEL_SIZE);
 					
 					
-					//weights is a matrix with kernel size -> Sobel upright border detector
-					double[][] weights = {{1,2,1},{0,0,0},{-1,-2,-1}};
-										
+					//weights is a matrix with kernel size -> Sobel filter
+					double[][] weights = {{-1,0,1},{-2,0,2},{-1,0,1}}; //vertical
+					//double[][] weights = {{-1,-2,-1},{0,0,0},{1,2,1}}; //horizontal
+					
 					//set the weights to the kernel
 					kernel.setWeights(weights);
 
@@ -467,7 +479,7 @@ public class PDIView {
 		});
 		btnBorderOperator.setToolTipText("Border Operator");
 		btnBorderOperator.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/border.png")));
-		btnBorderOperator.setBounds(672, 0, 51, 38);
+		btnBorderOperator.setBounds(583, 0, 43, 38);
 		frmSin.getContentPane().add(btnBorderOperator);
 
 		// set noise to a image
@@ -493,7 +505,7 @@ public class PDIView {
 		});
 		btnNoise.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/noise.png")));
 		btnNoise.setToolTipText("Noise (Salt and pepper)");
-		btnNoise.setBounds(733, 0, 51, 38);
+		btnNoise.setBounds(636, 0, 43, 38);
 		frmSin.getContentPane().add(btnNoise);
 		
 		//image quantization
@@ -519,7 +531,7 @@ public class PDIView {
 		});
 		btnQuantization.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/quantization.png")));
 		btnQuantization.setToolTipText("Quantization");
-		btnQuantization.setBounds(423, 0, 51, 38);
+		btnQuantization.setBounds(371, 0, 43, 38);
 		frmSin.getContentPane().add(btnQuantization);
 		
 		
@@ -546,7 +558,7 @@ public class PDIView {
 		});
 		btnSpliting.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/split.png")));
 		btnSpliting.setToolTipText("Spliting");
-		btnSpliting.setBounds(484, 0, 51, 38);
+		btnSpliting.setBounds(424, 0, 43, 38);
 		frmSin.getContentPane().add(btnSpliting);
 		
 		JButton btnGradient = new JButton("");
@@ -571,8 +583,94 @@ public class PDIView {
 		});
 		btnGradient.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/gradient.png")));
 		btnGradient.setToolTipText("Gradient");
-		btnGradient.setBounds(550, 0, 51, 38);
+		btnGradient.setBounds(477, 0, 43, 38);
 		frmSin.getContentPane().add(btnGradient);
+		
+		JButton btnArrows = new JButton("");
+		btnArrows.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/lines.png")));
+		btnArrows.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if (image == null) {
+
+					JOptionPane.showMessageDialog(null, "Open a image first!");
+				} else {
+
+					Mask kernel = new Mask(KERNEL_SIZE, KERNEL_SIZE);
+					
+					//weights is a matrix with kernel size -> Sobel filter
+					double[][] horizontal = {{-1,-1,-1},{2,2,2},{-1,-1,-1}}; //horizontal
+					double[][] vertical   = {{-1,2,-1},{-1,2,-1},{-1,2,-1}}; //vertical
+					double[][] diagonal1  = {{2,-1,-1},{-1,2,-1},{-1,-1,2}}; //diagonal1
+					double[][] diagonal2  = {{1,-1,2},{-1,2,-1},{2,-1,-1}}; //diagonal2
+					
+					//store the number of black pixels that have appeared in column, line
+					long totalVertical    = 0; 
+					long totalHorizontal  = 0;
+					long totalDiagonal    = 0;
+					
+					//set the weights to the kernel and process vertical
+					kernel.setWeights(vertical);
+					totalVertical = pdi.lineDetector(processedImage, kernel, vertical);
+
+					//set the weights to the kernel and process horizontal
+					kernel.setWeights(horizontal);
+					totalHorizontal = pdi.lineDetector(processedImage, kernel, horizontal);
+
+					//set the weights to the kernel and process diagonal
+					kernel.setWeights(diagonal1);
+					totalDiagonal = pdi.lineDetector(processedImage, kernel, diagonal1);
+					
+					System.out.println(totalVertical);
+					System.out.println(totalHorizontal);
+					System.out.println(totalDiagonal);
+					
+					//vertical
+					if((totalVertical > totalHorizontal) && (totalVertical > totalDiagonal)){
+						
+						JOptionPane.showMessageDialog(null, "Image with a vertical line!");
+						
+					//horizontal	
+					}else if((totalHorizontal > totalVertical) && (totalHorizontal > totalDiagonal)){
+						
+						JOptionPane.showMessageDialog(null, "Image with a horizontal line!");
+					
+					//diagonal
+					}else{
+						
+						JOptionPane.showMessageDialog(null, "Image with a diagonal line!");
+					}
+						
+				
+				
+				}
+				
+				
+			}
+		});
+		btnArrows.setToolTipText("Detect Line Orientation");
+		btnArrows.setBounds(689, 0, 43, 38);
+		frmSin.getContentPane().add(btnArrows);
+		
+		JButton btnObjects = new JButton("");
+		btnObjects.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/objects.png")));
+		btnObjects.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnObjects.setToolTipText("Detect the number of objects in a image");
+		btnObjects.setBounds(741, 0, 43, 38);
+		frmSin.getContentPane().add(btnObjects);
+		
+		JButton btnPass1 = new JButton("");
+		btnPass1.setToolTipText("Noise (Salt and pepper)");
+		btnPass1.setBounds(794, 0, 43, 38);
+		frmSin.getContentPane().add(btnPass1);
+		
+		JButton btnPass2 = new JButton("");
+		btnPass2.setToolTipText("Noise (Salt and pepper)");
+		btnPass2.setBounds(847, 0, 43, 38);
+		frmSin.getContentPane().add(btnPass2);
 
 		mntmOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {

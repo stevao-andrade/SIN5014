@@ -58,9 +58,10 @@ public class Convolution {
 
 		int kernelWidth = kernel.getWidth();
 		int kernelHeigth = kernel.getHeight();
-
-		double average = 0;
 		
+		int point = 0;
+		double average = 0;
+				
 				
 		// run each value of the kernel
 		for (int kernelLine = 0; kernelLine < kernelHeigth; kernelLine++) {
@@ -73,7 +74,7 @@ public class Convolution {
 					Color color = new Color(image.getRGB(imgColumn + kernelColumn, imgLine + kernelLine));
 					
 					// It's in gray scale, so RGB have always the same value
-					int point = color.getRed();
+					point = color.getRed();
 					
 					//check the value in the mask
 					double weight = kernel.getWeight(kernelLine, kernelColumn);
@@ -92,7 +93,7 @@ public class Convolution {
 		
 		// check if it's a valid value
 		int_average = Utils.checkBoundaries(int_average);
-				
+		
 		return int_average;
 	}
 	
