@@ -8,9 +8,6 @@ import java.util.Random;
 
 import usp.icmc.labes.model.Mask;
 
-
-
-
 /**
  * This class handles digital image process operations
  * 
@@ -226,7 +223,8 @@ public class PDI {
 				// get the color of the pixel
 				Color positionColor = new Color(image.getRGB(column, line));
 
-				// get the values of RGB channel. RGB will always have the same (gray scale)
+				// get the values of RGB channel. RGB will always have the same
+				// (gray scale)
 				int colorPixel = positionColor.getRed();
 
 				// update the pixel in the processed image with the ideal gray
@@ -291,9 +289,9 @@ public class PDI {
 
 				// define a new value to position pixel
 				positionPixel = Math.abs(positionPixel - positionPixel2) + Math.abs(positionPixel - positionPixel3);
-				
+
 				positionPixel = Utils.checkBoundaries(positionPixel);
-				
+
 				// define a new color with the positionPixel
 				Color newColor = new Color(positionPixel, positionPixel, positionPixel);
 
@@ -336,8 +334,8 @@ public class PDI {
 
 				// get the color of the pixel
 				Color positionColor = new Color(image.getRGB(column, line));
-				
-				//gray scale.. RGB is always the same
+
+				// gray scale.. RGB is always the same
 				int color = positionColor.getRed();
 
 				int valueColor = (int) (color / levelSize) * levelSize;
@@ -400,24 +398,26 @@ public class PDI {
 
 		return resultImage;
 	}
-	
-	
+
 	/**
 	 * Applies the mean filter to a image (reduce noise)
-	 * @param image Target image
-	 * @param kernel Object that represents the kernel with information about the size and width and height
+	 * 
+	 * @param image
+	 *            Target image
+	 * @param kernel
+	 *            Object that represents the kernel with information about the
+	 *            size and width and height
 	 * @return processed image
 	 */
 	public BufferedImage convolutionFilter(BufferedImage image, Mask kernel, double[][] weights) {
-		
-		//create result image
+
+		// create result image
 		BufferedImage resultImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
-		
-		
-		//set weights
+
+		// set weights
 		kernel.setWeights(weights);
-		
-		//creates convolution object
+
+		// creates convolution object
 		Convolution c = new Convolution(kernel);
 
 		// get the image dimensions
@@ -427,11 +427,11 @@ public class PDI {
 		// run for each pixel of the image
 		for (int line = 0; line < imageHeight; line++) {
 			for (int column = 0; column < imageWidth; column++) {
-				
-				//color after apply the mean filter
+
+				// color after apply the mean filter
 				int newColor;
-				
-				//operation in one pixel
+
+				// operation in one pixel
 				newColor = c.pixelConvolution(image, line, column, kernel);
 
 				// gray scale RGB is always the same
@@ -445,21 +445,22 @@ public class PDI {
 		return resultImage;
 	}
 
-	
-	
-	
 	/**
 	 * Applies the mean filter to a image (reduce noise)
-	 * @param image Target image
-	 * @param kernel Object that represents the kernel with information about the size and width and height
+	 * 
+	 * @param image
+	 *            Target image
+	 * @param kernel
+	 *            Object that represents the kernel with information about the
+	 *            size and width and height
 	 * @return processed image
 	 */
 	public BufferedImage medianFilter(BufferedImage image, Mask kernel) {
-		
-		//create result image
+
+		// create result image
 		BufferedImage resultImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
-						
-		//creates convolution object
+
+		// creates convolution object
 		Convolution c = new Convolution(kernel);
 
 		// get the image dimensions
@@ -469,11 +470,11 @@ public class PDI {
 		// run for each pixel of the image
 		for (int line = 0; line < imageHeight; line++) {
 			for (int column = 0; column < imageWidth; column++) {
-				
-				//color after apply the mean filter
+
+				// color after apply the mean filter
 				int newColor;
-				
-				//operation in one pixel
+
+				// operation in one pixel
 				newColor = c.medianConvolution(image, line, column, kernel);
 
 				// gray scale RGB is always the same
@@ -486,54 +487,105 @@ public class PDI {
 
 		return resultImage;
 	}
-	
-	
-	
+
 	/**
 	 * Applies the mean filter to a image (reduce noise)
-	 * @param image Target image
-	 * @param kernel Object that represents the kernel with information about the size and width and height
+	 * 
+	 * @param image
+	 *            Target image
+	 * @param kernel
+	 *            Object that represents the kernel with information about the
+	 *            size and width and height
 	 * @return processed image
 	 */
 	public long lineDetector(BufferedImage image, Mask kernel, double[][] weights) {
-		
-		//create result image
+
+		// create result image
 		BufferedImage resultImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
-		
-		
-		//set weights
+
+		// set weights
 		kernel.setWeights(weights);
-		
-		//creates convolution object
+
+		// creates convolution object
 		Convolution c = new Convolution(kernel);
 
 		// get the image dimensions
 		int imageHeight = image.getHeight();
 		int imageWidth = image.getWidth();
-			
+
 		long totalColor = 0;
-		
+
 		// run for each pixel of the image
 		for (int line = 0; line < imageHeight; line++) {
 			for (int column = 0; column < imageWidth; column++) {
-				
-				//color after apply the mean filter
+
+				// color after apply the mean filter
 				int newColor;
-				
-				//operation in one pixel
+
+				// operation in one pixel
 				newColor = c.pixelConvolution(image, line, column, kernel);
 				totalColor = totalColor + newColor;
-								
+
 				// gray scale RGB is always the same
 				Color color = new Color(newColor, newColor, newColor);
 
 				// update the value in result image
 				resultImage.setRGB(column, line, color.getRGB());
-				
-				
+
 			}
 		}
-		
+
 		return totalColor;
+	}
+
+	/**
+	 * Go through the pixels of the image and paint each object with one color
+	 * 
+	 * @param img
+	 *            target image
+	 * @param mark
+	 *            boolean matrix
+	 * @param row
+	 *            line
+	 * @param col
+	 *            column
+	 * @param srcColor
+	 *            will print with this color
+	 */
+	public BufferedImage flood_fill(BufferedImage img, boolean[][] mark, int row, int col, Color srcColor) {
+
+		// check the pixel color
+		Color pixelColor = new Color(img.getRGB(col, row));
+		int gray = pixelColor.getRed();
+		
+		//if it's white just ignore the pixel
+		if (gray == 255)
+			return img;
+
+		// make sure row and col are inside the image
+		if (row < 0)
+			return img;
+		if (col < 0)
+			return img;
+		if (row >= img.getHeight())
+			return img;
+		if (col >= img.getWidth())
+			return img;
+
+		// make sure this pixel hasn't been visited yet
+		if (mark[row][col])
+			return img;
+
+		// fill pixel with target color and mark it as visited
+		img.setRGB(col, row, srcColor.getRGB());
+		mark[row][col] = true;
+
+		// recursively fill surrounding pixels
+		flood_fill(img, mark, row - 1, col, srcColor);
+		flood_fill(img, mark, row + 1, col, srcColor);
+		flood_fill(img, mark, row, col - 1, srcColor);
+		flood_fill(img, mark, row, col + 1, srcColor);
+
+		return img;
 	}
 }

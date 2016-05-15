@@ -621,9 +621,9 @@ public class PDIView {
 					kernel.setWeights(diagonal1);
 					totalDiagonal = pdi.lineDetector(processedImage, kernel, diagonal1);
 					
-					System.out.println(totalVertical);
-					System.out.println(totalHorizontal);
-					System.out.println(totalDiagonal);
+//					System.out.println(totalVertical);
+//					System.out.println(totalHorizontal);
+//					System.out.println(totalDiagonal);
 					
 					//vertical
 					if((totalVertical > totalHorizontal) && (totalVertical > totalDiagonal)){
@@ -639,13 +639,9 @@ public class PDIView {
 					}else{
 						
 						JOptionPane.showMessageDialog(null, "Image with a diagonal line!");
-					}
-						
-				
-				
+					}				
 				}
-				
-				
+					
 			}
 		});
 		btnArrows.setToolTipText("Detect Line Orientation");
@@ -656,6 +652,36 @@ public class PDIView {
 		btnObjects.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/objects.png")));
 		btnObjects.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				//Flood fill
+				
+				if (image == null) {
+
+					JOptionPane.showMessageDialog(null, "Open a image first!");
+				} else {
+
+					BufferedImage fillImage = null;
+					
+					//fill with blue color
+					Color srcColor = null;
+					srcColor = Color.BLUE;
+					
+					//controller
+					boolean [][] mark = new boolean [processedImage.getHeight()][processedImage.getWidth()];
+					
+				
+					//go though each pixel in the image
+					for (int line = 0; line < processedImage.getHeight(); line++) {
+						for (int column = 0; column < processedImage.getWidth(); column++) {
+							fillImage = pdi.flood_fill(processedImage, mark, line, column, srcColor);
+						}
+					}
+					
+					processedImage = fillImage;
+					resizeDisplay(processedImage, imageLabel);
+
+				}
+				
 			}
 		});
 		btnObjects.setToolTipText("Detect the number of objects in a image");
@@ -678,7 +704,7 @@ public class PDIView {
 				JFileChooser fs = new JFileChooser(new File("c:\\"));
 				fs.setDialogTitle("Select a image");
 
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("Image File", "jpg", "jpge", "png");
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Image File", "jpg", "jpge", "png", "bmp");
 				fs.setFileFilter(filter);
 
 				int result = fs.showOpenDialog(null);
