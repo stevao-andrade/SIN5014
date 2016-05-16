@@ -3,8 +3,6 @@ package usp.icmc.labes.control;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
 import java.util.Random;
 
 import usp.icmc.labes.model.Mask;
@@ -590,15 +588,17 @@ public class PDI {
 		return img;
 	}
 
-	// Computes the centroid of the image.
-	public double[] getCentroid(BufferedImage targetImage) {
+	// Computes the signature of the image.
+	public ArrayList<Double> getSignature(BufferedImage targetImage) {
 
 		// area of the image
 		int area = 0;
 
 		double rowMean = 0;
 		double columnMean = 0;
-		double[] centroidArray = new double[2];
+
+		// distance between centroid and the points of the boarder
+		ArrayList<Double> signature = new ArrayList<Double>();
 
 		// get the image dimensions
 		int imageHeight = targetImage.getHeight();
@@ -623,13 +623,30 @@ public class PDI {
 			}
 		}
 
+		// centroid
 		rowMean = (double) rowMean / area;
 		columnMean = (double) columnMean / area;
 
-		centroidArray[0] = rowMean;
-		centroidArray[1] = columnMean;
+		// go though the image again
+		for (int px = 0; px < imageHeight; px++) {
+			for (int py = 0; py < imageWidth; py++) {
 
-		return centroidArray;
+				Color pixelColor = new Color(targetImage.getRGB(py, px));
+				int pixel = pixelColor.getRed();
+
+				// if it's not white it's part of the boarder
+				if (pixel != 255) {
+
+					Double distance;
+					distance = new Double(
+							Math.sqrt((rowMean - px) * (rowMean - px) + (columnMean - py) * (columnMean - py)));
+
+					signature.add(distance);
+				}
+			}
+		}
+
+		return signature;
 	}
 
 }

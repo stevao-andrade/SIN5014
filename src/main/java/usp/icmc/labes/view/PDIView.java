@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -29,28 +30,29 @@ import org.jfree.ui.HorizontalAlignment;
 import net.coobird.thumbnailator.Thumbnails;
 import usp.icmc.labes.control.Histogram;
 import usp.icmc.labes.control.PDI;
+import usp.icmc.labes.control.Skeleton;
 import usp.icmc.labes.control.Utils;
+import usp.icmc.labes.model.BasicStatistics;
 import usp.icmc.labes.model.Mask;
-
 
 public class PDIView {
 
 	private final int WITDH_PANEL_SIZE = 750;
 	private final int HEIGHT_PANEL_SIZE = 600;
-	
-	//higher the value less noise
+
+	// higher the value less noise
 	int INTERVAL_NOISE = 50;
-	
-	//intensity
+
+	// intensity
 	int INTENSITY = 10;
-	
-	//mean
+
+	// mean
 	int KERNEL_SIZE = 3;
-	
-	//quantization
+
+	// quantization
 	int FINAL_COLORS_NUMBER = 12;
-	
-	//splitting
+
+	// splitting
 	int COLOR_DISPLACEMENT = 128;
 	int SPLITING_DISPLACEMENT = 20;
 
@@ -61,7 +63,6 @@ public class PDIView {
 	BufferedImage image = null;
 	BufferedImage processedImage = null;
 
-
 	/**
 	 * Resize the loaded image to a pre defined resolution
 	 * 
@@ -69,23 +70,24 @@ public class PDIView {
 	 * @param labelToDisplay
 	 */
 	private void resizeDisplay(BufferedImage imageToResize, JLabel labelToDisplay) {
-		
+
 		processedImage = imageToResize;
-		
+
 		int imageHeight = imageToResize.getHeight();
 		int imageWidth = imageToResize.getWidth();
-		
-		if( (imageHeight > HEIGHT_PANEL_SIZE) && ( imageWidth > WITDH_PANEL_SIZE)){
-			
+
+		if ((imageHeight > HEIGHT_PANEL_SIZE) && (imageWidth > WITDH_PANEL_SIZE)) {
+
 			try {
-				processedImage = Thumbnails.of(imageToResize).size(WITDH_PANEL_SIZE, HEIGHT_PANEL_SIZE).asBufferedImage();
+				processedImage = Thumbnails.of(imageToResize).size(WITDH_PANEL_SIZE, HEIGHT_PANEL_SIZE)
+						.asBufferedImage();
 			} catch (FileNotFoundException e) {
 				JOptionPane.showMessageDialog(null, "File Not Found.");
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, "Can't Read the File.");
 			}
 		}
-		
+
 		// set into the label
 		labelToDisplay.setIcon(new ImageIcon(processedImage));
 	}
@@ -267,7 +269,6 @@ public class PDIView {
 				} else {
 
 					BufferedImage intensityImage = null;
-					
 
 					intensityImage = pdi.changeColorIntensity(processedImage, INTENSITY);
 					processedImage = intensityImage;
@@ -307,13 +308,12 @@ public class PDIView {
 		btnIntensityDown.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/down.png")));
 		btnIntensityDown.setBounds(159, 0, 43, 38);
 		frmSin.getContentPane().add(btnIntensityDown);
-		
-		
-		//mean filter
+
+		// mean filter
 		JButton btnMeanFilter = new JButton("");
 		btnMeanFilter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				if (image == null) {
 
 					JOptionPane.showMessageDialog(null, "Open a image first!");
@@ -321,45 +321,41 @@ public class PDIView {
 
 					BufferedImage meanImage = null;
 					Mask kernel = new Mask(KERNEL_SIZE, KERNEL_SIZE);
-					
+
 					// mean filter is always 1/ (width x height) of the kernel
 					double meanFilter;
 					meanFilter = (double) 1 / (kernel.getWidth() * kernel.getHeight());
-					
-					//weights is a matrix with kernel size
-					double[][] weights = new double [kernel.getWidth()][kernel.getHeight()];
-					
-					//fulfill the matrix with the values of the meanFilter
-					for(int i= 0; i< kernel.getWidth(); i++)
-						for(int j = 0; j < kernel.getHeight(); j++)
+
+					// weights is a matrix with kernel size
+					double[][] weights = new double[kernel.getWidth()][kernel.getHeight()];
+
+					// fulfill the matrix with the values of the meanFilter
+					for (int i = 0; i < kernel.getWidth(); i++)
+						for (int j = 0; j < kernel.getHeight(); j++)
 							weights[i][j] = meanFilter;
-						
-					
-					//set the weights to the kernel
+
+					// set the weights to the kernel
 					kernel.setWeights(weights);
 
-					
 					meanImage = pdi.convolutionFilter(processedImage, kernel, weights);
 
 					processedImage = meanImage;
 					resizeDisplay(processedImage, imageLabel);
 
 				}
-				
-				
+
 			}
 		});
 		btnMeanFilter.setToolTipText("Mean Filter");
 		btnMeanFilter.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/mean.png")));
 		btnMeanFilter.setBounds(212, 0, 43, 38);
 		frmSin.getContentPane().add(btnMeanFilter);
-		
-		
-		//median filter
+
+		// median filter
 		JButton btnMedianFilter = new JButton("");
 		btnMedianFilter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 				if (image == null) {
 
 					JOptionPane.showMessageDialog(null, "Open a image first!");
@@ -367,7 +363,7 @@ public class PDIView {
 
 					BufferedImage medianImage = null;
 					Mask kernel = new Mask(KERNEL_SIZE, KERNEL_SIZE);
-					
+
 					medianImage = pdi.medianFilter(processedImage, kernel);
 
 					processedImage = medianImage;
@@ -375,7 +371,6 @@ public class PDIView {
 
 				}
 
-				
 			}
 		});
 		btnMedianFilter.setToolTipText("Median Filter");
@@ -408,14 +403,12 @@ public class PDIView {
 		btnEqualization.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/equalizer.png")));
 		btnEqualization.setBounds(318, 0, 43, 38);
 		frmSin.getContentPane().add(btnEqualization);
-		
-		
-		//high pass filter
+
+		// high pass filter
 		JButton btnHighPassFilter = new JButton("");
 		btnHighPassFilter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
+
 				if (image == null) {
 
 					JOptionPane.showMessageDialog(null, "Open a image first!");
@@ -423,12 +416,11 @@ public class PDIView {
 
 					BufferedImage highImage = null;
 					Mask kernel = new Mask(KERNEL_SIZE, KERNEL_SIZE);
-					
-					
-					//weights is a matrix with kernel size -> Highpass filter
-					double[][] weights = {{-1,-1,-1},{-1,8,-1},{-1,-1,-1}};
-										
-					//set the weights to the kernel
+
+					// weights is a matrix with kernel size -> Highpass filter
+					double[][] weights = { { -1, -1, -1 }, { -1, 8, -1 }, { -1, -1, -1 } };
+
+					// set the weights to the kernel
 					kernel.setWeights(weights);
 
 					highImage = pdi.convolutionFilter(processedImage, kernel, weights);
@@ -437,7 +429,7 @@ public class PDIView {
 					resizeDisplay(processedImage, imageLabel);
 
 				}
-				
+
 			}
 		});
 		btnHighPassFilter.setToolTipText("High Pass Filter");
@@ -445,13 +437,12 @@ public class PDIView {
 				.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/low_frequency.png")));
 		btnHighPassFilter.setBounds(530, 0, 43, 38);
 		frmSin.getContentPane().add(btnHighPassFilter);
-		
-		
-		//border filter
+
+		// border filter
 		JButton btnBorderOperator = new JButton("");
 		btnBorderOperator.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				if (image == null) {
 
 					JOptionPane.showMessageDialog(null, "Open a image first!");
@@ -459,13 +450,13 @@ public class PDIView {
 
 					BufferedImage borderImage = null;
 					Mask kernel = new Mask(KERNEL_SIZE, KERNEL_SIZE);
-					
-					
-					//weights is a matrix with kernel size -> Sobel filter
-					double[][] weights = {{-1,0,1},{-2,0,2},{-1,0,1}}; //vertical
-					//double[][] weights = {{-1,-2,-1},{0,0,0},{1,2,1}}; //horizontal
-					
-					//set the weights to the kernel
+
+					// weights is a matrix with kernel size -> Sobel filter
+					double[][] weights = { { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } }; // vertical
+					// double[][] weights = {{-1,-2,-1},{0,0,0},{1,2,1}};
+					// //horizontal
+
+					// set the weights to the kernel
 					kernel.setWeights(weights);
 
 					borderImage = pdi.convolutionFilter(processedImage, kernel, weights);
@@ -474,7 +465,7 @@ public class PDIView {
 					resizeDisplay(processedImage, imageLabel);
 
 				}
-				
+
 			}
 		});
 		btnBorderOperator.setToolTipText("Border Operator");
@@ -493,7 +484,7 @@ public class PDIView {
 				} else {
 
 					BufferedImage noisedImage = null;
-										
+
 					noisedImage = pdi.generateNoise(processedImage, INTERVAL_NOISE);
 
 					processedImage = noisedImage;
@@ -507,47 +498,46 @@ public class PDIView {
 		btnNoise.setToolTipText("Noise (Salt and pepper)");
 		btnNoise.setBounds(636, 0, 43, 38);
 		frmSin.getContentPane().add(btnNoise);
-		
-		//image quantization
+
+		// image quantization
 		JButton btnQuantization = new JButton("");
 		btnQuantization.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				if (image == null) {
 
 					JOptionPane.showMessageDialog(null, "Open a image first!");
 				} else {
 
 					BufferedImage quantizedImage = null;
-					
-					//this parameter should be controlled
+
+					// this parameter should be controlled
 					quantizedImage = pdi.quantizationImage(processedImage, FINAL_COLORS_NUMBER);
 
 					processedImage = quantizedImage;
 					resizeDisplay(processedImage, imageLabel);
 				}
-				
+
 			}
 		});
 		btnQuantization.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/quantization.png")));
 		btnQuantization.setToolTipText("Quantization");
 		btnQuantization.setBounds(371, 0, 43, 38);
 		frmSin.getContentPane().add(btnQuantization);
-		
-		
-		//image splitting
+
+		// image splitting
 		JButton btnSpliting = new JButton("");
 		btnSpliting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				if (image == null) {
 
 					JOptionPane.showMessageDialog(null, "Open a image first!");
 				} else {
 
 					BufferedImage splitImage = null;
-					
-					//this parameters need to be controllable
+
+					// this parameters need to be controllable
 					splitImage = pdi.splitImage(processedImage, COLOR_DISPLACEMENT, SPLITING_DISPLACEMENT);
 
 					processedImage = splitImage;
@@ -560,7 +550,7 @@ public class PDIView {
 		btnSpliting.setToolTipText("Spliting");
 		btnSpliting.setBounds(424, 0, 43, 38);
 		frmSin.getContentPane().add(btnSpliting);
-		
+
 		JButton btnGradient = new JButton("");
 		btnGradient.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -579,124 +569,142 @@ public class PDIView {
 
 				}
 			}
-				
+
 		});
 		btnGradient.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/gradient.png")));
 		btnGradient.setToolTipText("Gradient");
 		btnGradient.setBounds(477, 0, 43, 38);
 		frmSin.getContentPane().add(btnGradient);
-		
+
 		JButton btnArrows = new JButton("");
 		btnArrows.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/lines.png")));
 		btnArrows.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				if (image == null) {
 
 					JOptionPane.showMessageDialog(null, "Open a image first!");
 				} else {
 
 					Mask kernel = new Mask(KERNEL_SIZE, KERNEL_SIZE);
-					
-					//weights is a matrix with kernel size -> Sobel filter
-					double[][] horizontal = {{-1,-1,-1},{2,2,2},{-1,-1,-1}}; //horizontal
-					double[][] vertical   = {{-1,2,-1},{-1,2,-1},{-1,2,-1}}; //vertical
-					double[][] diagonal1  = {{2,-1,-1},{-1,2,-1},{-1,-1,2}}; //diagonal1
-					double[][] diagonal2  = {{1,-1,2},{-1,2,-1},{2,-1,-1}}; //diagonal2
-					
-					//store the number of black pixels that have appeared in column, line
-					long totalVertical    = 0; 
-					long totalHorizontal  = 0;
-					long totalDiagonal    = 0;
-					
-					//set the weights to the kernel and process vertical
+
+					// weights is a matrix with kernel size -> Sobel filter
+					double[][] horizontal = { { -1, -1, -1 }, { 2, 2, 2 }, { -1, -1, -1 } }; // horizontal
+					double[][] vertical = { { -1, 2, -1 }, { -1, 2, -1 }, { -1, 2, -1 } }; // vertical
+					double[][] diagonal1 = { { 2, -1, -1 }, { -1, 2, -1 }, { -1, -1, 2 } }; // diagonal1
+					double[][] diagonal2 = { { 1, -1, 2 }, { -1, 2, -1 }, { 2, -1, -1 } }; // diagonal2
+
+					// store the number of black pixels that have appeared in
+					// column, line
+					long totalVertical = 0;
+					long totalHorizontal = 0;
+					long totalDiagonal = 0;
+
+					// set the weights to the kernel and process vertical
 					kernel.setWeights(vertical);
 					totalVertical = pdi.lineDetector(processedImage, kernel, vertical);
 
-					//set the weights to the kernel and process horizontal
+					// set the weights to the kernel and process horizontal
 					kernel.setWeights(horizontal);
 					totalHorizontal = pdi.lineDetector(processedImage, kernel, horizontal);
 
-					//set the weights to the kernel and process diagonal
+					// set the weights to the kernel and process diagonal
 					kernel.setWeights(diagonal1);
 					totalDiagonal = pdi.lineDetector(processedImage, kernel, diagonal1);
-					
-//					System.out.println(totalVertical);
-//					System.out.println(totalHorizontal);
-//					System.out.println(totalDiagonal);
-					
-					//vertical
-					if((totalVertical > totalHorizontal) && (totalVertical > totalDiagonal)){
-						
+
+					// System.out.println(totalVertical);
+					// System.out.println(totalHorizontal);
+					// System.out.println(totalDiagonal);
+
+					// vertical
+					if ((totalVertical > totalHorizontal) && (totalVertical > totalDiagonal)) {
+
 						JOptionPane.showMessageDialog(null, "Image with a vertical line!");
-						
-					//horizontal	
-					}else if((totalHorizontal > totalVertical) && (totalHorizontal > totalDiagonal)){
-						
+
+						// horizontal
+					} else if ((totalHorizontal > totalVertical) && (totalHorizontal > totalDiagonal)) {
+
 						JOptionPane.showMessageDialog(null, "Image with a horizontal line!");
-					
-					//diagonal
-					}else{
-						
+
+						// diagonal
+					} else {
+
 						JOptionPane.showMessageDialog(null, "Image with a diagonal line!");
-					}				
+					}
 				}
-					
+
 			}
 		});
 		btnArrows.setToolTipText("Detect Line Orientation");
 		btnArrows.setBounds(689, 0, 43, 38);
 		frmSin.getContentPane().add(btnArrows);
-		
+
 		JButton btnObjects = new JButton("");
 		btnObjects.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/objects.png")));
 		btnObjects.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				//Flood fill
-				
+
+				// Flood fill
+
 				if (image == null) {
 
 					JOptionPane.showMessageDialog(null, "Open a image first!");
 				} else {
 
 					BufferedImage fillImage = null;
-					
-					//fill with blue color
+
+					// fill with blue color
 					Color srcColor = null;
 					srcColor = Color.BLUE;
-					
-					//controller
-					boolean [][] mark = new boolean [processedImage.getHeight()][processedImage.getWidth()];
-					
-				
-					//go though each pixel in the image
+
+					// controller
+					boolean[][] mark = new boolean[processedImage.getHeight()][processedImage.getWidth()];
+
+					// go though each pixel in the image
 					for (int line = 0; line < processedImage.getHeight(); line++) {
 						for (int column = 0; column < processedImage.getWidth(); column++) {
 							fillImage = pdi.flood_fill(processedImage, mark, line, column, srcColor);
 						}
 					}
-					
+
 					processedImage = fillImage;
 					resizeDisplay(processedImage, imageLabel);
 
 				}
-				
+
 			}
 		});
 		btnObjects.setToolTipText("Detect the number of objects in a image");
 		btnObjects.setBounds(741, 0, 43, 38);
 		frmSin.getContentPane().add(btnObjects);
-		
+
 		JButton btnSignature = new JButton("");
 		btnSignature.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				//detect the shape of an object
-				double[] centroidArray = new double[2];
-				
-				centroidArray = pdi.getCentroid(processedImage);
 
+				if (image == null) {
+
+					JOptionPane.showMessageDialog(null, "Open a image first!");
+				} else {
+					// detect the shape of an object
+					ArrayList<Double> signature = new ArrayList<Double>();
+
+					// get the signature
+					signature = pdi.getSignature(processedImage);
+
+					// do some basic statistcs to a arraylist (mean, variance, std)
+					BasicStatistics bs = new BasicStatistics(signature);
+
+					double std = bs.getStdDev();
+										
+					// check the standard deviation
+					if (std <= 5.0) {
+						JOptionPane.showMessageDialog(null, "The shape of the object looks like a circle!");
+					} else {
+						JOptionPane.showMessageDialog(null, "The shape of the object looks like a retangle");
+					}
+
+				}
 
 			}
 		});
@@ -704,9 +712,30 @@ public class PDIView {
 		btnSignature.setToolTipText("Try to detect the shape of an object");
 		btnSignature.setBounds(794, 0, 43, 38);
 		frmSin.getContentPane().add(btnSignature);
-		
+
 		JButton btnPass2 = new JButton("");
-		btnPass2.setToolTipText("");
+		btnPass2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				// thin a image
+				if (image == null) {
+
+					JOptionPane.showMessageDialog(null, "Open a image first!");
+				} else {
+
+					BufferedImage thinImage = null;
+					Skeleton skeleton = new Skeleton();
+					thinImage = skeleton.doSkeletonProcess(processedImage);
+
+					processedImage = thinImage;
+					resizeDisplay(processedImage, imageLabel);
+
+				}
+
+			}
+		});
+		btnPass2.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/skeleton.jpg")));
+		btnPass2.setToolTipText("Apply ZhangSuen skeleton algorithm to thin a image");
 		btnPass2.setBounds(847, 0, 43, 38);
 		frmSin.getContentPane().add(btnPass2);
 
