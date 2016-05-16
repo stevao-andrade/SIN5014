@@ -688,13 +688,25 @@ public class PDIView {
 		btnObjects.setBounds(741, 0, 43, 38);
 		frmSin.getContentPane().add(btnObjects);
 		
-		JButton btnPass1 = new JButton("");
-		btnPass1.setToolTipText("Noise (Salt and pepper)");
-		btnPass1.setBounds(794, 0, 43, 38);
-		frmSin.getContentPane().add(btnPass1);
+		JButton btnSignature = new JButton("");
+		btnSignature.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				//detect the shape of an object
+				double[] centroidArray = new double[2];
+				
+				centroidArray = pdi.getCentroid(processedImage);
+
+
+			}
+		});
+		btnSignature.setIcon(new ImageIcon(PDIView.class.getResource("/usp/icmc/labes/resources/forms.png")));
+		btnSignature.setToolTipText("Try to detect the shape of an object");
+		btnSignature.setBounds(794, 0, 43, 38);
+		frmSin.getContentPane().add(btnSignature);
 		
 		JButton btnPass2 = new JButton("");
-		btnPass2.setToolTipText("Noise (Salt and pepper)");
+		btnPass2.setToolTipText("");
 		btnPass2.setBounds(847, 0, 43, 38);
 		frmSin.getContentPane().add(btnPass2);
 

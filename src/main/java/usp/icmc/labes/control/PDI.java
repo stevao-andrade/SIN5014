@@ -3,6 +3,7 @@ package usp.icmc.labes.control;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Random;
 
@@ -557,8 +558,8 @@ public class PDI {
 		// check the pixel color
 		Color pixelColor = new Color(img.getRGB(col, row));
 		int gray = pixelColor.getRed();
-		
-		//if it's white just ignore the pixel
+
+		// if it's white just ignore the pixel
 		if (gray == 255)
 			return img;
 
@@ -588,4 +589,47 @@ public class PDI {
 
 		return img;
 	}
+
+	// Computes the centroid of the image.
+	public double[] getCentroid(BufferedImage targetImage) {
+
+		// area of the image
+		int area = 0;
+
+		double rowMean = 0;
+		double columnMean = 0;
+		double[] centroidArray = new double[2];
+
+		// get the image dimensions
+		int imageHeight = targetImage.getHeight();
+		int imageWidth = targetImage.getWidth();
+
+		// run for each pixel of the image
+		for (int line = 0; line < imageHeight; line++) {
+			for (int column = 0; column < imageWidth; column++) {
+
+				// get the color of the pixel
+				Color positionColor = new Color(targetImage.getRGB(column, line));
+				int color = positionColor.getRed();
+
+				// check if the pixel is part of an object
+				if (color != 255) {
+					area = area + 1; // count the area of the object
+					rowMean += line; // count pixel rows that make part of the
+										// object
+					columnMean += column; // count pixel columns that make part
+											// of the object
+				}
+			}
+		}
+
+		rowMean = (double) rowMean / area;
+		columnMean = (double) columnMean / area;
+
+		centroidArray[0] = rowMean;
+		centroidArray[1] = columnMean;
+
+		return centroidArray;
+	}
+
 }
